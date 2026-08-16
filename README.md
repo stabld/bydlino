@@ -1,4 +1,4 @@
-# Roomy
+# Bydlino
 
 MVP aplikace pro studenty v Brně — hledání pokoje k pronájmu a hledání spolubydlícího
 (Tinder-style swipe). Propojeno konceptem s Remexo (zatím jen placeholder banner, žádná
