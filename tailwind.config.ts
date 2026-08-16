@@ -5,30 +5,30 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: "#0A0A10",
-        surface: "#15151F",
-        surface2: "#1D1D2A",
-        line: "rgba(255,255,255,0.09)",
-        fg: "#F5F4F2",
-        muted: "#9A97AC",
+        // Tmavá, mírně teplá škála — laděná k Remexo.cz
+        bg: "#0B0B0D",
+        surface: "#141416",
+        surface2: "#1C1C20",
+        line: "rgba(255,255,255,0.10)",
+        fg: "#FAFAF9",
+        muted: "#A1A1A6",
         accent: {
-          DEFAULT: "#FF4D6D",
-          soft: "rgba(255,77,109,0.16)",
+          DEFAULT: "#F59E0B",
+          hover: "#FBBF24",
+          soft: "rgba(245,158,11,0.14)",
         },
-        violet: {
-          DEFAULT: "#8B5CF6",
-          soft: "rgba(139,92,246,0.16)",
-        },
-        gold: "#FFC94A",
+        success: "#34D399",
+        danger: "#F87171",
       },
       backgroundImage: {
-        "gradient-primary": "linear-gradient(135deg, #FF4D6D 0%, #8B5CF6 100%)",
-        "gradient-primary-soft": "linear-gradient(135deg, rgba(255,77,109,0.18) 0%, rgba(139,92,246,0.18) 100%)",
+        "gradient-primary": "linear-gradient(135deg, #F59E0B 0%, #F97316 100%)",
+        "gradient-primary-soft":
+          "linear-gradient(135deg, rgba(245,158,11,0.16) 0%, rgba(249,115,22,0.16) 100%)",
       },
       boxShadow: {
-        glow: "0 0 40px -8px rgba(255,77,109,0.45), 0 0 80px -20px rgba(139,92,246,0.35)",
-        "glow-sm": "0 0 20px -6px rgba(255,77,109,0.4)",
-        "glow-violet": "0 0 30px -8px rgba(139,92,246,0.45)",
+        glow: "0 0 40px -10px rgba(245,158,11,0.5)",
+        "glow-sm": "0 6px 20px -8px rgba(245,158,11,0.55)",
+        card: "0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -12px rgba(0,0,0,0.6)",
       },
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],
@@ -36,17 +36,8 @@ const config: Config = {
         mono: ["var(--font-mono)", "monospace"],
       },
       borderRadius: {
-        card: "20px",
+        card: "16px",
         tag: "999px",
-      },
-      keyframes: {
-        "pop-in": {
-          "0%": { transform: "scale(0.9)", opacity: "0" },
-          "100%": { transform: "scale(1)", opacity: "1" },
-        },
-      },
-      animation: {
-        "pop-in": "pop-in 0.2s ease-out",
       },
     },
   },
