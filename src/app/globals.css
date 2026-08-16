@@ -5,10 +5,11 @@
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
+    color-scheme: dark;
   }
 
   body {
-    @apply bg-paper text-ink font-body antialiased;
+    @apply bg-bg text-fg font-body antialiased;
   }
 
   h1,
@@ -18,18 +19,53 @@
   }
 
   ::selection {
-    @apply bg-accent/20;
+    @apply bg-accent/30;
   }
 
   *:focus-visible {
-    outline: 2px solid theme("colors.ink");
+    outline: 2px solid theme("colors.accent.DEFAULT");
     outline-offset: 2px;
     border-radius: 4px;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: theme("colors.muted");
+    opacity: 0.7;
   }
 }
 
 @layer components {
-  /* "Badge hole" — die-cut kruh nahoře na swipe kartě, jako u lanyard visačky. */
+  /* Ambientní světelné skvrny za obsahem — "rozsvícená okna v noci" atmosféra. */
+  .ambient-glow {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .ambient-glow::before,
+  .ambient-glow::after {
+    content: "";
+    position: absolute;
+    width: 60vh;
+    height: 60vh;
+    border-radius: 999px;
+    filter: blur(90px);
+    opacity: 0.28;
+  }
+  .ambient-glow::before {
+    top: -15vh;
+    right: -15vh;
+    background: #ff4d6d;
+  }
+  .ambient-glow::after {
+    bottom: -10vh;
+    left: -20vh;
+    background: #8b5cf6;
+  }
+
+  /* "Badge hole" — die-cut kruh nahoře na swipe kartě, prosvícený jako neonová visačka. */
   .badge-hole {
     @apply relative;
   }
@@ -42,8 +78,9 @@
     width: 14px;
     height: 14px;
     border-radius: 999px;
-    background: theme("colors.paper");
-    border: 2px solid theme("colors.line");
+    background: theme("colors.bg");
+    border: 2px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 0 12px 1px rgba(255, 77, 109, 0.5);
     z-index: 20;
   }
 
@@ -60,8 +97,8 @@
     width: 6px;
     height: 6px;
     border-radius: 999px;
-    background: theme("colors.paper");
-    opacity: 0.55;
+    background: rgba(255, 255, 255, 0.85);
+    opacity: 0.6;
   }
 }
 
