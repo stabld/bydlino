@@ -14,13 +14,20 @@ skutečná integrace ani monetizace).
 
 ## Funkce v této verzi
 
-- **Hledat pokoj** — katalog inzerátů s filtry (lokalita, max. cena, počet pokojů),
-  detail inzerátu, vytvoření/úprava/smazání vlastního inzerátu s uploadem fotek.
-- **Spolubydlící** — swipe karty (like/pass), bezpečně vyhodnocený match na backendu,
-  po matchi se odemkne Instagram/Facebook kontakt.
+- **Landing page** — veřejná úvodní stránka pro nepřihlášené (`/`), odkud se jde
+  registrovat. Přihlášený uživatel je z ní automaticky přesměrován do aplikace.
+- **Hledat pokoj** — katalog inzerátů s fulltextovým hledáním, filtry (čtvrť, max. cena,
+  počet pokojů) a řazením (nejnovější / nejlevnější / nejdražší). Detail inzerátu
+  s galerií fotek, vytvoření/úprava/smazání vlastního inzerátu.
+- **Mám zájem** — zájemce projeví zájem o inzerát (volitelně se zprávou). Tím se oběma
+  stranám odemknou kontakty a majitel uvidí zájemce v seznamu u svého inzerátu.
+- **Uložené pokoje** — záložka na každém inzerátu, uložené se sbírají v přehledu.
+- **Spolubydlící** — swipe karty (like/pass) s možností vrátit poslední swipe zpět,
+  bezpečně vyhodnocený match na backendu, po matchi se odemkne IG/FB kontakt.
+- **Přehled** — shody, uložené pokoje a moje inzeráty na jedné stránce.
 - **Profil** — foto, jméno, věk, univerzita, fakulta, bio, lifestyle tagy, rozpočet,
-  preferovaná lokalita, IG/FB.
-- **Remexo banner** — vizuální placeholder na hlavní stránce, zatím bez odkazu.
+  preferovaná lokalita, IG/FB + ukazatel, jak je profil vyplněný.
+- **Remexo banner** — vizuální placeholder v katalogu, zatím bez odkazu.
 
 Záměrně **není** součástí: interní chat, platby, předplatné, notifikace, mapy, AI,
 administrace. Cílem je otestovat základní use-case na studentech, ne stavět sociální síť.
@@ -33,8 +40,10 @@ administrace. Cílem je otestovat základní use-case na studentech, ne stavět 
    např. Frankfurt).
 2. V **Project Settings → API** si zkopíruj `Project URL` a `anon public` klíč.
 3. V **SQL Editor** vytvoř novou query, vlož celý obsah souboru `supabase/schema.sql`
-   z tohoto repa a spusť ho. Tím se vytvoří:
-   - tabulky `profiles`, `profile_contacts`, `listings`, `swipes`, `matches`
+   z tohoto repa a spusť ho. Soubor je bezpečný na opakované spuštění, takže když
+   ho spustíš znovu po aktualizaci aplikace, jen doplní chybějící části. Vytvoří se:
+   - tabulky `profiles`, `profile_contacts`, `listings`, `swipes`, `matches`,
+     `saved_listings`, `listing_interests`
    - RLS politiky (uživatel upravuje jen svůj profil a své inzeráty)
    - trigger, který bezpečně na backendu vyhodnotí vzájemný like jako match
    - trigger, který při registraci automaticky založí prázdný profil
@@ -82,9 +91,12 @@ Aplikace poběží na `http://localhost:3000`.
   žádnou `insert` policy pro běžné uživatele. Jediná cesta je databázový trigger
   `handle_swipe_match`, který po každém swipe zkontroluje, jestli existuje i opačný
   „like", a teprve pak match vytvoří. Klient tedy nemůže match zfalšovat.
-- **Instagram/Facebook** jsou v samostatné tabulce `profile_contacts` s vlastní RLS:
-  cizí kontakt je čitelný jen tehdy, když v `matches` existuje řádek spojující oba
-  uživatele.
+- **Instagram/Facebook** jsou v samostatné tabulce `profile_contacts` s vlastní RLS.
+  Cizí kontakt je čitelný jen ve třech případech: existuje vzájemný match ze swipování,
+  nebo jsem majitel inzerátu a ten člověk o něj projevil zájem, nebo jsem naopak já
+  projevil zájem o jeho inzerát. Jinak zůstává skrytý.
+- **Zájem o vlastní inzerát** nejde vytvořit — kontroluje to `WITH CHECK` politika
+  přímo v databázi, ne jen frontend.
 
 ## Struktura projektu
 
@@ -113,9 +125,9 @@ supabase/
 
 ## Známá omezení MVP
 
-- Žádné real-time notifikace o novém matchi — kontakt se zobrazí okamžitě po swipu
-  v modal okně, jinak je vidět na stránce „Moje shody".
-- Žádný chat uvnitř aplikace — po matchi se studenti domlouvají přes odemčený
-  Instagram/Facebook.
-- Pořadí kandidátů ve swipe deckem je jednoduše zamíchané na klientovi (žádný
-  doporučovací algoritmus) — pro pilot v malém městě to stačí.
+- Žádné real-time notifikace — kontakt se zobrazí hned po akci, jinak je vidět
+  na stránce Přehled.
+- Žádný chat uvnitř aplikace — lidé se domlouvají přes odemčený Instagram/Facebook.
+- Pořadí kandidátů ve swipe balíčku je zamíchané na klientovi (žádný doporučovací
+  algoritmus) — pro pilot v jednom městě to stačí.
+- Inzeráty nemají moderaci ani nahlašování. Před ostrým během doporučuji doplnit.

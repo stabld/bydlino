@@ -1,15 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MapPin, DoorOpen, CalendarDays, Pencil } from "lucide-react";
+import { MapPin, DoorOpen, CalendarDays, Pencil, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { formatPrice, formatDate, initials } from "@/lib/utils";
 import { Tag } from "@/components/shared/Tag";
 import { BackLink } from "@/components/shared/BackLink";
 import { DeleteListingButton } from "@/components/listings/DeleteListingButton";
-import type { Listing, Profile } from "@/lib/types";
+import { SaveButton } from "@/components/listings/SaveButton";
+import { InterestButton } from "@/components/listings/InterestButton";
+import { PhotoGallery } from "@/components/listings/PhotoGallery";
+import type { Listing, Profile, ProfileContacts, ListingInterest } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
+
+type InterestRow = {
+  interest: ListingInterest;
+  profile: Profile;
+  contacts: ProfileContacts | null;
+};
 
 export default async function ListingDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient();
@@ -26,34 +35,77 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
 
   if (!listing) notFound();
 
+  const isOwner = user?.id === listing.owner_id;
+
   const { data: owner } = await supabase
     .from("profiles")
     .select("id, name, photo_url")
     .eq("id", listing.owner_id)
     .maybeSingle<Pick<Profile, "id" | "name" | "photo_url">>();
 
-  const isOwner = user?.id === listing.owner_id;
+  const { data: savedRow } = user
+    ? await supabase
+        .from("saved_listings")
+        .select("listing_id")
+        .eq("user_id", user.id)
+        .eq("listing_id", listing.id)
+        .maybeSingle()
+    : { data: null };
+
+  const { data: myInterest } =
+    user && !isOwner
+      ? await supabase
+          .from("listing_interests")
+          .select("*")
+          .eq("listing_id", listing.id)
+          .eq("user_id", user.id)
+          .maybeSingle<ListingInterest>()
+      : { data: null };
+
+  // Kontakt na majitele — RLS ho vrátí jen tehdy, když na něj mám nárok.
+  const { data: ownerContacts } = !isOwner
+    ? await supabase
+        .from("profile_contacts")
+        .select("*")
+        .eq("user_id", listing.owner_id)
+        .maybeSingle<ProfileContacts>()
+    : { data: null };
+
+  // Seznam zájemců vidí pouze majitel inzerátu.
+  let interested: InterestRow[] = [];
+  if (isOwner) {
+    const { data: rows } = await supabase
+      .from("listing_interests")
+      .select("*")
+      .eq("listing_id", listing.id)
+      .order("created_at", { ascending: false })
+      .returns<ListingInterest[]>();
+
+    const ids = (rows ?? []).map((r) => r.user_id);
+    if (ids.length) {
+      const [{ data: profiles }, { data: contactRows }] = await Promise.all([
+        supabase.from("profiles").select("*").in("id", ids).returns<Profile[]>(),
+        supabase.from("profile_contacts").select("*").in("user_id", ids).returns<ProfileContacts[]>(),
+      ]);
+      const profileById = new Map((profiles ?? []).map((p) => [p.id, p]));
+      const contactById = new Map((contactRows ?? []).map((c) => [c.user_id, c]));
+      interested = (rows ?? [])
+        .map((interest) => {
+          const profile = profileById.get(interest.user_id);
+          if (!profile) return null;
+          return { interest, profile, contacts: contactById.get(interest.user_id) ?? null };
+        })
+        .filter((x): x is InterestRow => Boolean(x));
+    }
+  }
+
   const availableFrom = formatDate(listing.available_from);
 
   return (
     <div className="space-y-5">
       <BackLink href="/listings" label="Zpět na nabídky" />
 
-      <div className="overflow-hidden rounded-card border border-line bg-surface">
-        {listing.photos.length > 0 ? (
-          <div className="flex snap-x snap-mandatory overflow-x-auto">
-            {listing.photos.map((photo) => (
-              <div key={photo} className="relative aspect-[4/3] w-full shrink-0 snap-center bg-fg/5">
-                <Image src={photo} alt={listing.title} fill sizes="480px" className="object-cover" />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="flex aspect-[4/3] w-full items-center justify-center bg-fg/5">
-            <DoorOpen className="h-8 w-8 text-muted" strokeWidth={1.5} />
-          </div>
-        )}
-      </div>
+      <PhotoGallery photos={listing.photos} title={listing.title} />
 
       <div>
         <div className="flex items-start justify-between gap-3">
@@ -112,17 +164,92 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
         )}
       </div>
 
-      {isOwner && (
-        <div className="flex gap-2 border-t border-line pt-4">
-          <Link
-            href={`/listings/${listing.id}/edit`}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-line py-3 text-sm font-semibold text-fg"
-          >
-            <Pencil className="h-4 w-4" strokeWidth={1.75} />
-            Upravit
-          </Link>
-          <DeleteListingButton listingId={listing.id} />
+      {!isOwner && user && (
+        <div className="space-y-2.5">
+          <InterestButton
+            listingId={listing.id}
+            ownerName={owner?.name || "inzerenta"}
+            initialInterested={Boolean(myInterest)}
+            initialContacts={ownerContacts ?? null}
+          />
+          <SaveButton listingId={listing.id} initiallySaved={Boolean(savedRow)} variant="full" />
         </div>
+      )}
+
+      {isOwner && (
+        <>
+          <div className="rounded-card border border-line bg-surface p-4">
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-accent" strokeWidth={2} />
+              <h2 className="font-display text-sm font-semibold text-fg">
+                Zájemci ({interested.length})
+              </h2>
+            </div>
+
+            {interested.length === 0 ? (
+              <p className="mt-2 text-sm text-muted">
+                Zatím se nikdo neozval. Jakmile někdo projeví zájem, uvidíš ho tady i s kontaktem.
+              </p>
+            ) : (
+              <div className="mt-3 space-y-3">
+                {interested.map(({ interest, profile, contacts }) => (
+                  <div key={interest.id} className="rounded-2xl border border-line bg-bg p-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-surface2">
+                        {profile.photo_url ? (
+                          <Image
+                            src={profile.photo_url}
+                            alt={profile.name}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-xs font-semibold text-fg">
+                            {initials(profile.name)}
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-fg">
+                          {profile.name}
+                          {profile.age ? `, ${profile.age}` : ""}
+                        </p>
+                        {(profile.university || profile.faculty) && (
+                          <p className="truncate text-xs text-muted">
+                            {[profile.faculty, profile.university].filter(Boolean).join(" · ")}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {interest.message && (
+                      <p className="mt-2 whitespace-pre-line text-sm text-fg/80">
+                        {interest.message}
+                      </p>
+                    )}
+
+                    {(contacts?.instagram || contacts?.facebook) && (
+                      <p className="mt-2 font-mono text-xs text-accent">
+                        {[contacts?.instagram, contacts?.facebook].filter(Boolean).join("  ·  ")}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-2 border-t border-line pt-4">
+            <Link
+              href={`/listings/${listing.id}/edit`}
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-line py-3 text-sm font-semibold text-fg"
+            >
+              <Pencil className="h-4 w-4" strokeWidth={1.75} />
+              Upravit
+            </Link>
+            <DeleteListingButton listingId={listing.id} />
+          </div>
+        </>
       )}
     </div>
   );

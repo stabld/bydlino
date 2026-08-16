@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Users, RotateCcw, Loader2 } from "lucide-react";
+import { Users, RotateCcw, Loader2, Undo2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { useToast } from "@/components/shared/Toast";
 import type { Profile, ProfileContacts, SwipeDirection } from "@/lib/types";
 import { SwipeCard, type SwipeSignal } from "./SwipeCard";
 import { ActionButtons } from "./ActionButtons";
@@ -10,13 +11,17 @@ import { MatchModal } from "./MatchModal";
 import { EmptyState } from "@/components/shared/EmptyState";
 
 export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
+  const toast = useToast();
+
   const [candidates, setCandidates] = useState<Profile[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [signal, setSignal] = useState<SwipeSignal | null>(null);
-  const [matchData, setMatchData] = useState<{ profile: Profile; contacts: ProfileContacts | null } | null>(
-    null
-  );
+  const [lastSwiped, setLastSwiped] = useState<Profile | null>(null);
+  const [matchData, setMatchData] = useState<{
+    profile: Profile;
+    contacts: ProfileContacts | null;
+  } | null>(null);
 
   const loadCandidates = useCallback(async () => {
     setLoading(true);
@@ -38,6 +43,7 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
 
     const shuffled = [...(profiles ?? [])].sort(() => Math.random() - 0.5);
     setCandidates(shuffled);
+    setLastSwiped(null);
     setLoading(false);
   }, [currentUserId]);
 
@@ -49,17 +55,24 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
     const target = candidates?.[0];
     if (!target) return;
     setBusy(true);
-    // Reset signal *before* the next card becomes active, otherwise it would
-    // instantly receive a stale non-null signal on its first active render.
+    // Signál musí zmizet dřív, než se další karta stane aktivní,
+    // jinak by hned dostala starou instrukci k odletu.
     setSignal(null);
     setCandidates((prev) => (prev ? prev.slice(1) : prev));
+    setLastSwiped(target);
 
     const supabase = createClient();
-    await supabase.from("swipes").insert({
+    const { error } = await supabase.from("swipes").insert({
       from_user: currentUserId,
       to_user: target.id,
       direction,
     });
+
+    if (error) {
+      toast("Swipe se neuložil, zkus to znovu.", "error");
+      setBusy(false);
+      return;
+    }
 
     if (direction === "like") {
       const { data: match } = await supabase
@@ -77,9 +90,32 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
           .eq("user_id", target.id)
           .maybeSingle<ProfileContacts>();
         setMatchData({ profile: target, contacts: contacts ?? null });
+        setLastSwiped(null);
       }
     }
 
+    setBusy(false);
+  }
+
+  /** Vrátí poslední swipe zpět — smaže záznam a vrátí profil na začátek balíčku. */
+  async function undoLast() {
+    if (!lastSwiped || busy) return;
+    setBusy(true);
+
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("swipes")
+      .delete()
+      .eq("from_user", currentUserId)
+      .eq("to_user", lastSwiped.id);
+
+    if (error) {
+      toast("Vrácení se nepovedlo.", "error");
+    } else {
+      setCandidates((prev) => (prev ? [lastSwiped, ...prev] : [lastSwiped]));
+      setLastSwiped(null);
+      toast("Vráceno zpět");
+    }
     setBusy(false);
   }
 
@@ -95,8 +131,9 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
     <div className="flex flex-col items-center">
       <div className="relative aspect-[3/4.3] w-full max-w-sm">
         {loading ? (
-          <div className="flex h-full w-full items-center justify-center rounded-card border border-line bg-surface">
-            <Loader2 className="h-5 w-5 animate-spin text-muted" />
+          <div className="flex h-full w-full flex-col items-center justify-center gap-3 rounded-card border border-line bg-surface">
+            <Loader2 className="h-5 w-5 animate-spin text-accent" />
+            <p className="text-sm text-muted">Načítám studenty…</p>
           </div>
         ) : visible.length > 0 ? (
           [...visible].reverse().map((profile, i) => {
@@ -118,15 +155,15 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
             <EmptyState
               icon={Users}
               title="Zatím nikdo další"
-              description="Mrkni znovu později — noví studenti se přidávají průběžně."
+              description="Prošel/prošla jsi všechny profily. Noví studenti se přidávají průběžně."
               action={
                 <button
                   type="button"
                   onClick={loadCandidates}
-                  className="inline-flex items-center gap-1.5 rounded-2xl bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-black shadow-glow-sm"
+                  className="inline-flex items-center gap-1.5 rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-glow-sm"
                 >
                   <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
-                  Obnovit
+                  Načíst znovu
                 </button>
               }
             />
@@ -136,7 +173,23 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
 
       {visible.length > 0 && (
         <div className="mt-6 w-full">
-          <ActionButtons onPass={() => triggerSwipe("pass")} onLike={() => triggerSwipe("like")} disabled={busy} />
+          <ActionButtons
+            onPass={() => triggerSwipe("pass")}
+            onLike={() => triggerSwipe("like")}
+            disabled={busy}
+          />
+
+          {lastSwiped && (
+            <button
+              type="button"
+              onClick={undoLast}
+              disabled={busy}
+              className="mx-auto mt-4 flex items-center gap-1.5 rounded-tag border border-line px-4 py-2 text-xs font-medium text-muted transition-colors hover:text-fg disabled:opacity-50"
+            >
+              <Undo2 className="h-3.5 w-3.5" strokeWidth={2} />
+              Vrátit {lastSwiped.name}
+            </button>
+          )}
         </div>
       )}
 

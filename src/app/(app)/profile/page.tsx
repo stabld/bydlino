@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { ProfileForm } from "@/components/profile/ProfileForm";
+import { ProfileCompleteness } from "@/components/profile/ProfileCompleteness";
 import type { Profile, ProfileContacts } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +27,7 @@ export default async function ProfilePage() {
         <h1 className="font-display text-2xl font-bold text-fg">Profil</h1>
         <p className="mt-0.5 text-sm text-muted">Tohle vidí ostatní studenti u tvých swipe karet.</p>
       </div>
+      <ProfileCompleteness profile={profile} contacts={contacts} />
       <ProfileForm profile={profile} contacts={contacts} />
     </div>
   );

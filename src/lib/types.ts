@@ -62,6 +62,25 @@ export type MatchWithProfile = Match & {
   contacts: ProfileContacts | null;
 };
 
+export type SavedListing = {
+  user_id: string;
+  listing_id: string;
+  created_at: string;
+};
+
+export type ListingInterest = {
+  id: string;
+  listing_id: string;
+  user_id: string;
+  message: string | null;
+  created_at: string;
+};
+
+export type InterestWithProfile = ListingInterest & {
+  profile: Profile;
+  contacts: ProfileContacts | null;
+};
+
 /** Minimal Supabase Database type — used to type the client without full codegen. */
 export type Database = {
   public: {
@@ -103,6 +122,18 @@ export type Database = {
         Row: Match;
         Insert: Partial<Match> & { user_a: string; user_b: string };
         Update: Partial<Match>;
+        Relationships: [];
+      };
+      saved_listings: {
+        Row: SavedListing;
+        Insert: { user_id: string; listing_id: string };
+        Update: Partial<SavedListing>;
+        Relationships: [];
+      };
+      listing_interests: {
+        Row: ListingInterest;
+        Insert: Partial<ListingInterest> & { listing_id: string; user_id: string };
+        Update: Partial<ListingInterest>;
         Relationships: [];
       };
     };

@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { useToast } from "@/components/shared/Toast";
 
 export function DeleteListingButton({ listingId }: { listingId: string }) {
   const router = useRouter();
+  const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [confirming, setConfirming] = useState(false);
 
@@ -18,6 +20,7 @@ export function DeleteListingButton({ listingId }: { listingId: string }) {
     setLoading(true);
     const supabase = createClient();
     await supabase.from("listings").delete().eq("id", listingId);
+    toast("Inzerát smazán");
     router.push("/listings");
     router.refresh();
   }

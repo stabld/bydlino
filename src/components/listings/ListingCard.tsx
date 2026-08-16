@@ -4,8 +4,9 @@ import { MapPin, DoorOpen } from "lucide-react";
 import type { Listing } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
 import { Tag } from "@/components/shared/Tag";
+import { SaveButton } from "@/components/listings/SaveButton";
 
-export function ListingCard({ listing }: { listing: Listing }) {
+export function ListingCard({ listing, saved = false }: { listing: Listing; saved?: boolean }) {
   const cover = listing.photos[0];
 
   return (
@@ -30,6 +31,10 @@ export function ListingCard({ listing }: { listing: Listing }) {
 
         <div className="price-tag absolute left-3 top-3 rounded-tag bg-accent py-1.5 pl-5 pr-3 font-mono text-xs font-bold text-black shadow-glow-sm">
           {formatPrice(listing.price)}
+        </div>
+
+        <div className="absolute right-3 top-3">
+          <SaveButton listingId={listing.id} initiallySaved={saved} />
         </div>
       </div>
 

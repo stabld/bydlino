@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Loader2, Camera, Check } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { parseTags, randomFileName, initials } from "@/lib/utils";
+import { useToast } from "@/components/shared/Toast";
 import type { Profile, ProfileContacts } from "@/lib/types";
 
 export function ProfileForm({
@@ -16,6 +17,7 @@ export function ProfileForm({
   contacts: ProfileContacts | null;
 }) {
   const router = useRouter();
+  const toast = useToast();
 
   const [photoUrl, setPhotoUrl] = useState(profile.photo_url);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
@@ -88,9 +90,12 @@ export function ProfileForm({
       setPhotoUrl(nextPhotoUrl);
       setPhotoFile(null);
       setSaved(true);
+      toast("Profil uložen");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Uložení se nepovedlo. Zkus to znovu.");
+      const msg = err instanceof Error ? err.message : "Uložení se nepovedlo. Zkus to znovu.";
+      setError(msg);
+      toast("Uložení se nepovedlo.", "error");
     } finally {
       setLoading(false);
     }

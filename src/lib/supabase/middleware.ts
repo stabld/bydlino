@@ -4,6 +4,8 @@ import { NextResponse, type NextRequest } from "next/server";
 const PUBLIC_PATHS = ["/login", "/register", "/auth/callback"];
 
 function isPublicPath(pathname: string): boolean {
+  // "/" je veřejná landing page pro nepřihlášené.
+  if (pathname === "/") return true;
   return PUBLIC_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 }
 
@@ -46,7 +48,8 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (user && (pathname === "/login" || pathname === "/register")) {
+  // Přihlášený uživatel nemá co dělat na landing page ani v auth formulářích.
+  if (user && (pathname === "/" || pathname === "/login" || pathname === "/register")) {
     return NextResponse.redirect(new URL("/listings", request.url));
   }
 

@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { Loader2, X, ImagePlus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { parseTags, randomFileName } from "@/lib/utils";
+import { useToast } from "@/components/shared/Toast";
 import type { Listing } from "@/lib/types";
 
 const MAX_PHOTOS = 5;
 
 export function ListingForm({ listing }: { listing?: Listing }) {
   const router = useRouter();
+  const toast = useToast();
   const isEdit = Boolean(listing);
 
   const [title, setTitle] = useState(listing?.title ?? "");
@@ -92,6 +94,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
           .update(payload)
           .eq("id", listing.id);
         if (updateError) throw updateError;
+        toast("Inzerát uložen");
         router.push(`/listings/${listing.id}`);
       } else {
         const { data: inserted, error: insertError } = await supabase
@@ -100,11 +103,14 @@ export function ListingForm({ listing }: { listing?: Listing }) {
           .select("id")
           .single();
         if (insertError) throw insertError;
+        toast("Inzerát zveřejněn");
         router.push(`/listings/${inserted.id}`);
       }
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Něco se nepovedlo. Zkus to znovu.");
+      const msg = err instanceof Error ? err.message : "Něco se nepovedlo. Zkus to znovu.";
+      setError(msg);
+      toast("Uložení se nepovedlo.", "error");
       setLoading(false);
     }
   }

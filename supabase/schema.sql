@@ -326,3 +326,123 @@ create policy "listings_photos_owner_delete" on storage.objects
 -- Hotovo. Ověření: v Table editoru by měly být profiles, profile_contacts,
 -- listings, swipes, matches — všechny s RLS enabled (zámek v UI).
 -- ============================================================================
+
+-- ============================================================================
+-- 6. ULOŽENÉ INZERÁTY (oblíbené)
+-- ============================================================================
+
+create table if not exists public.saved_listings (
+  user_id     uuid not null references public.profiles(id) on delete cascade,
+  listing_id  uuid not null references public.listings(id) on delete cascade,
+  created_at  timestamptz not null default now(),
+  primary key (user_id, listing_id)
+);
+
+comment on table public.saved_listings is 'Inzeráty, které si uživatel uložil mezi oblíbené. Vidí je jen on sám.';
+
+create index if not exists idx_saved_user on public.saved_listings(user_id);
+
+alter table public.saved_listings enable row level security;
+
+drop policy if exists "saved_select_own" on public.saved_listings;
+create policy "saved_select_own" on public.saved_listings
+  for select to authenticated
+  using (auth.uid() = user_id);
+
+drop policy if exists "saved_insert_own" on public.saved_listings;
+create policy "saved_insert_own" on public.saved_listings
+  for insert to authenticated
+  with check (auth.uid() = user_id);
+
+drop policy if exists "saved_delete_own" on public.saved_listings;
+create policy "saved_delete_own" on public.saved_listings
+  for delete to authenticated
+  using (auth.uid() = user_id);
+
+-- ============================================================================
+-- 7. ZÁJEM O INZERÁT
+--
+-- Bez tohohle si zájemce a majitel inzerátu neměli jak předat kontakt.
+-- Zájemce klikne na "Mám zájem" -> majitel ho uvidí v seznamu zájemců
+-- a oba si navzájem odemknou kontaktní údaje (viz upravená policy níže).
+-- ============================================================================
+
+create table if not exists public.listing_interests (
+  id          uuid primary key default gen_random_uuid(),
+  listing_id  uuid not null references public.listings(id) on delete cascade,
+  user_id     uuid not null references public.profiles(id) on delete cascade,
+  message     text,
+  created_at  timestamptz not null default now(),
+  constraint listing_interests_unique unique (listing_id, user_id)
+);
+
+comment on table public.listing_interests is 'Projevený zájem o inzerát. Odemyká kontakt mezi zájemcem a majitelem inzerátu.';
+
+create index if not exists idx_interests_listing on public.listing_interests(listing_id);
+create index if not exists idx_interests_user on public.listing_interests(user_id);
+
+alter table public.listing_interests enable row level security;
+
+-- Zájemce nesmí projevit zájem o vlastní inzerát (kontrola na úrovni DB).
+drop policy if exists "interests_insert_own" on public.listing_interests;
+create policy "interests_insert_own" on public.listing_interests
+  for insert to authenticated
+  with check (
+    auth.uid() = user_id
+    and not exists (
+      select 1 from public.listings l
+      where l.id = listing_id and l.owner_id = auth.uid()
+    )
+  );
+
+-- Vidí ho zájemce sám a majitel daného inzerátu.
+drop policy if exists "interests_select_involved" on public.listing_interests;
+create policy "interests_select_involved" on public.listing_interests
+  for select to authenticated
+  using (
+    auth.uid() = user_id
+    or exists (
+      select 1 from public.listings l
+      where l.id = listing_interests.listing_id and l.owner_id = auth.uid()
+    )
+  );
+
+drop policy if exists "interests_delete_own" on public.listing_interests;
+create policy "interests_delete_own" on public.listing_interests
+  for delete to authenticated
+  using (auth.uid() = user_id);
+
+-- ============================================================================
+-- 8. ROZŠÍŘENÍ VIDITELNOSTI KONTAKTŮ
+--
+-- Kontakt je nově čitelný také tehdy, když mezi dvěma lidmi existuje
+-- vztah "zájem o inzerát" (v obou směrech). Match zůstává beze změny.
+-- ============================================================================
+
+drop policy if exists "contacts_select_own_or_matched" on public.profile_contacts;
+create policy "contacts_select_own_or_matched" on public.profile_contacts
+  for select to authenticated
+  using (
+    -- vlastní kontakt
+    auth.uid() = user_id
+    -- vzájemný match ze swipování
+    or exists (
+      select 1 from public.matches m
+      where (m.user_a = auth.uid() and m.user_b = profile_contacts.user_id)
+         or (m.user_b = auth.uid() and m.user_a = profile_contacts.user_id)
+    )
+    -- jsem majitel inzerátu a tenhle člověk o něj projevil zájem
+    or exists (
+      select 1
+      from public.listing_interests i
+      join public.listings l on l.id = i.listing_id
+      where l.owner_id = auth.uid() and i.user_id = profile_contacts.user_id
+    )
+    -- projevil jsem zájem o inzerát tohoto člověka
+    or exists (
+      select 1
+      from public.listing_interests i
+      join public.listings l on l.id = i.listing_id
+      where i.user_id = auth.uid() and l.owner_id = profile_contacts.user_id
+    )
+  );
