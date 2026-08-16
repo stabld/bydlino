@@ -15,7 +15,7 @@
   h1,
   h2,
   h3 {
-    @apply font-display;
+    @apply font-display tracking-tight;
   }
 
   ::selection {
@@ -25,18 +25,23 @@
   *:focus-visible {
     outline: 2px solid theme("colors.accent.DEFAULT");
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 
   input::placeholder,
   textarea::placeholder {
     color: theme("colors.muted");
-    opacity: 0.7;
+    opacity: 0.65;
+  }
+
+  /* Tmavý kalendář/select v prohlížeči, ať neproblikne bílé okno. */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8);
   }
 }
 
 @layer components {
-  /* Ambientní světelné skvrny za obsahem — "rozsvícená okna v noci" atmosféra. */
+  /* Jemná světelná záře nahoře — stejná atmosféra jako hero na Remexo.cz. */
   .ambient-glow {
     position: fixed;
     inset: 0;
@@ -44,28 +49,23 @@
     pointer-events: none;
     overflow: hidden;
   }
-  .ambient-glow::before,
-  .ambient-glow::after {
+  .ambient-glow::before {
     content: "";
     position: absolute;
-    width: 60vh;
-    height: 60vh;
+    top: -30vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110vw;
+    height: 70vh;
     border-radius: 999px;
-    filter: blur(90px);
-    opacity: 0.28;
-  }
-  .ambient-glow::before {
-    top: -15vh;
-    right: -15vh;
-    background: #ff4d6d;
-  }
-  .ambient-glow::after {
-    bottom: -10vh;
-    left: -20vh;
-    background: #8b5cf6;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(245, 158, 11, 0.16) 0%,
+      rgba(245, 158, 11, 0) 70%
+    );
   }
 
-  /* "Badge hole" — die-cut kruh nahoře na swipe kartě, prosvícený jako neonová visačka. */
+  /* "Badge hole" — prosvícený otvor nahoře na swipe kartě, jako visačka na šňůrce. */
   .badge-hole {
     @apply relative;
   }
@@ -75,16 +75,15 @@
     top: 14px;
     left: 50%;
     transform: translateX(-50%);
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
     border-radius: 999px;
     background: theme("colors.bg");
-    border: 2px solid rgba(255, 255, 255, 0.22);
-    box-shadow: 0 0 12px 1px rgba(255, 77, 109, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.25);
     z-index: 20;
   }
 
-  /* Stejný "tag hole" motiv na cenovém štítku u inzerátu. */
+  /* Stejný motiv dírky na cenovém štítku u inzerátu. */
   .price-tag {
     @apply relative;
   }
@@ -94,11 +93,10 @@
     top: 50%;
     left: 10px;
     transform: translateY(-50%);
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.85);
-    opacity: 0.6;
+    background: rgba(0, 0, 0, 0.45);
   }
 }
 

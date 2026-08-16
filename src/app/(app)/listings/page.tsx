@@ -36,14 +36,14 @@ export default async function ListingsPage({
     <div className="space-y-5">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-ink">Hledat pokoj</h1>
+          <h1 className="font-display text-2xl font-bold text-fg">Hledat pokoj</h1>
           <p className="mt-0.5 text-sm text-muted">
             {listings?.length ?? 0} {listings?.length === 1 ? "nabídka" : "nabídek"} v Brně
           </p>
         </div>
         <Link
           href="/listings/new"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-paper shadow-sm transition-transform active:scale-95"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-primary text-black shadow-glow-sm transition-transform active:scale-95"
           aria-label="Přidat inzerát"
         >
           <Plus className="h-5 w-5" strokeWidth={2.25} />
@@ -72,7 +72,7 @@ export default async function ListingsPage({
           action={
             <Link
               href="/listings/new"
-              className="rounded-2xl bg-ink px-5 py-2.5 text-sm font-semibold text-paper"
+              className="rounded-2xl bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-black shadow-glow-sm"
             >
               Přidat inzerát
             </Link>

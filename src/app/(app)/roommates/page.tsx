@@ -26,7 +26,7 @@ export default async function RoommatesPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="font-display text-2xl font-bold text-ink">Spolubydlící</h1>
+        <h1 className="font-display text-2xl font-bold text-fg">Spolubydlící</h1>
         <p className="mt-0.5 text-sm text-muted">Swipe doprava = líbí se mi, doleva = další.</p>
       </div>
 
@@ -36,7 +36,7 @@ export default async function RoommatesPage() {
           title="Nejdřív si vyplň profil"
           description="Aby tě ostatní studenti mohli najít, doplň si jméno, školu a pár fotek v profilu."
           action={
-            <Link href="/profile" className="rounded-2xl bg-ink px-5 py-2.5 text-sm font-semibold text-paper">
+            <Link href="/profile" className="rounded-2xl bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-black shadow-glow-sm">
               Vyplnit profil
             </Link>
           }

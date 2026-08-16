@@ -21,22 +21,25 @@ const mono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Roomy — bydlení a spolubydlící pro studenty v Brně",
+  title: "Bydlino — bydlení a spolubydlící pro studenty v Brně",
   description:
-    "Roomy pomáhá studentům v Brně najít pokoj k pronájmu a vhodného spolubydlícího. Rychlé, moderní MVP.",
+    "Bydlino pomáhá studentům v Brně najít pokoj k pronájmu a vhodného spolubydlícího. Rychlé, moderní MVP.",
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#FAFAF8",
+  themeColor: "#0A0A10",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="cs" className={`${display.variable} ${body.variable} ${mono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <div className="ambient-glow" aria-hidden="true" />
+        {children}
+      </body>
     </html>
   );
 }

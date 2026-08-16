@@ -54,17 +54,17 @@ export default function RegisterPage() {
   if (needsConfirmation) {
     return (
       <div className="flex min-h-dvh flex-col items-center justify-center px-6 py-12 text-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-soft">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-primary-soft">
           <MailCheck className="h-6 w-6 text-accent" strokeWidth={1.75} />
         </div>
-        <h1 className="mt-5 font-display text-xl font-semibold text-ink">Zkontroluj e-mail</h1>
+        <h1 className="mt-5 font-display text-xl font-semibold text-fg">Zkontroluj e-mail</h1>
         <p className="mt-2 max-w-xs text-sm text-muted">
-          Poslali jsme potvrzovací odkaz na <span className="font-medium text-ink">{email}</span>.
+          Poslali jsme potvrzovací odkaz na <span className="font-medium text-fg">{email}</span>.
           Po potvrzení se budeš moct přihlásit.
         </p>
         <Link
           href="/login"
-          className="mt-6 rounded-2xl bg-ink px-6 py-3 text-sm font-semibold text-paper"
+          className="mt-6 rounded-2xl bg-gradient-primary px-6 py-3 text-sm font-semibold text-black shadow-glow-sm"
         >
           Zpět na přihlášení
         </Link>
@@ -77,8 +77,9 @@ export default function RegisterPage() {
       <div className="mx-auto w-full max-w-sm">
         <div className="mb-10 text-center">
           <div className="mb-1 flex items-center justify-center gap-1.5">
-            <span className="font-display text-3xl font-bold tracking-tight text-ink">Roomy</span>
-            <span className="h-2 w-2 rounded-full bg-accent" />
+            <span className="bg-gradient-primary bg-clip-text font-display text-3xl font-bold tracking-tight text-transparent">
+              Bydlino
+            </span>
           </div>
           <p className="text-sm text-muted">Založ si účet a začni hledat</p>
         </div>
@@ -96,7 +97,7 @@ export default function RegisterPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Jana Nováková"
-              className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-ink"
+              className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
             />
           </div>
           <div>
@@ -111,7 +112,7 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="jana@vut.cz"
-              className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-ink"
+              className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
             />
           </div>
           <div>
@@ -127,7 +128,7 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="alespoň 6 znaků"
-              className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-ink"
+              className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
             />
           </div>
 
@@ -136,7 +137,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-ink py-3.5 text-sm font-semibold text-paper transition-transform active:scale-[0.98] disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
           >
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -151,7 +152,7 @@ export default function RegisterPage() {
 
         <p className="mt-6 text-center text-sm text-muted">
           Už máš účet?{" "}
-          <Link href="/login" className="font-semibold text-ink underline underline-offset-2">
+          <Link href="/login" className="font-semibold text-fg underline underline-offset-2">
             Přihlas se
           </Link>
         </p>

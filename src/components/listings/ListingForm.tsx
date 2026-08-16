@@ -120,7 +120,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
               <button
                 type="button"
                 onClick={() => removeExistingPhoto(url)}
-                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-ink/70 text-paper"
+                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-white"
                 aria-label="Odebrat fotku"
               >
                 <X className="h-3 w-3" />
@@ -134,7 +134,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
               <button
                 type="button"
                 onClick={() => removeNewPhoto(i)}
-                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-ink/70 text-paper"
+                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-white"
                 aria-label="Odebrat fotku"
               >
                 <X className="h-3 w-3" />
@@ -142,7 +142,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
             </div>
           ))}
           {totalPhotoCount < MAX_PHOTOS && (
-            <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-line text-muted transition-colors hover:border-ink hover:text-ink">
+            <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-line text-muted transition-colors hover:border-accent hover:text-accent">
               <ImagePlus className="h-5 w-5" strokeWidth={1.5} />
               <span className="text-[10px] font-medium">Přidat</span>
               <input
@@ -167,7 +167,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Slunný pokoj u VUT"
-          className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -185,7 +185,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             placeholder="8000"
-            className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div>
@@ -200,7 +200,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
             inputMode="numeric"
             value={rooms}
             onChange={(e) => setRooms(e.target.value)}
-            className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
       </div>
@@ -215,7 +215,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
             required
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div>
@@ -227,7 +227,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Královo Pole"
-            className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
       </div>
@@ -241,7 +241,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
           type="date"
           value={availableFrom ?? ""}
           onChange={(e) => setAvailableFrom(e.target.value)}
-          className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -255,7 +255,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Krátce popiš pokoj, byt a spolubydlící..."
-          className="w-full resize-none rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+          className="w-full resize-none rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -268,7 +268,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
           value={tagsInput}
           onChange={(e) => setTagsInput(e.target.value)}
           placeholder="balkón, po rekonstrukci, MHD 5 min"
-          className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -277,7 +277,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
       <button
         type="submit"
         disabled={loading}
-        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-paper transition-transform active:scale-[0.98] disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
       >
         {loading && <Loader2 className="h-4 w-4 animate-spin" />}
         {isEdit ? "Uložit změny" : "Zveřejnit inzerát"}

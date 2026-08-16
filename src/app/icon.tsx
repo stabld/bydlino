@@ -10,26 +10,14 @@ export default function Icon() {
         style={{
           width: "100%",
           height: "100%",
-          background: "#111113",
+          background: "linear-gradient(135deg, #FF4D6D 0%, #8B5CF6 100%)",
           borderRadius: 8,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          position: "relative",
         }}
       >
-        <span style={{ color: "#FAFAF8", fontSize: 20, fontWeight: 700 }}>R</span>
-        <div
-          style={{
-            position: "absolute",
-            top: 6,
-            right: 6,
-            width: 5,
-            height: 5,
-            borderRadius: "50%",
-            background: "#FF4D6D",
-          }}
-        />
+        <span style={{ color: "#F5F4F2", fontSize: 19, fontWeight: 700 }}>B</span>
       </div>
     ),
     { ...size }

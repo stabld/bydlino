@@ -49,7 +49,7 @@ export default async function MatchesPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="font-display text-2xl font-bold text-ink">Moje shody</h1>
+        <h1 className="font-display text-2xl font-bold text-fg">Moje shody</h1>
         <p className="mt-0.5 text-sm text-muted">
           {rows.length} {rows.length === 1 ? "shoda" : rows.length >= 2 && rows.length <= 4 ? "shody" : "shod"}
         </p>
@@ -64,19 +64,19 @@ export default async function MatchesPage() {
       ) : (
         <div className="space-y-3">
           {rows.map(({ match, profile, contacts }) => (
-            <div key={match.id} className="rounded-card border border-line bg-white p-4">
+            <div key={match.id} className="rounded-card border border-line bg-surface p-4">
               <div className="flex items-center gap-3">
-                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-ink">
+                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-surface2">
                   {profile.photo_url ? (
                     <Image src={profile.photo_url} alt={profile.name} fill className="object-cover" />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-paper">
+                    <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-fg">
                       {initials(profile.name)}
                     </div>
                   )}
                 </div>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-ink">
+                  <p className="truncate text-sm font-semibold text-fg">
                     {profile.name}
                     {profile.age ? `, ${profile.age}` : ""}
                   </p>
@@ -92,13 +92,13 @@ export default async function MatchesPage() {
               {(contacts?.instagram || contacts?.facebook) && (
                 <div className="mt-3 flex flex-wrap gap-2 border-t border-line pt-3">
                   {contacts?.instagram && (
-                    <span className="inline-flex items-center gap-1.5 rounded-tag bg-ink/5 px-3 py-1.5 text-xs font-medium text-ink">
+                    <span className="inline-flex items-center gap-1.5 rounded-tag bg-fg/8 border border-line px-3 py-1.5 text-xs font-medium text-fg">
                       <Instagram className="h-3.5 w-3.5" strokeWidth={1.75} />
                       {contacts.instagram}
                     </span>
                   )}
                   {contacts?.facebook && (
-                    <span className="inline-flex items-center gap-1.5 rounded-tag bg-ink/5 px-3 py-1.5 text-xs font-medium text-ink">
+                    <span className="inline-flex items-center gap-1.5 rounded-tag bg-fg/8 border border-line px-3 py-1.5 text-xs font-medium text-fg">
                       <Facebook className="h-3.5 w-3.5" strokeWidth={1.75} />
                       {contacts.facebook}
                     </span>

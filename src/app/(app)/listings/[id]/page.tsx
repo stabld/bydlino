@@ -39,17 +39,17 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
     <div className="space-y-5">
       <BackLink href="/listings" label="Zpět na nabídky" />
 
-      <div className="overflow-hidden rounded-card border border-line bg-white">
+      <div className="overflow-hidden rounded-card border border-line bg-surface">
         {listing.photos.length > 0 ? (
           <div className="flex snap-x snap-mandatory overflow-x-auto">
             {listing.photos.map((photo) => (
-              <div key={photo} className="relative aspect-[4/3] w-full shrink-0 snap-center bg-ink/5">
+              <div key={photo} className="relative aspect-[4/3] w-full shrink-0 snap-center bg-fg/5">
                 <Image src={photo} alt={listing.title} fill sizes="480px" className="object-cover" />
               </div>
             ))}
           </div>
         ) : (
-          <div className="flex aspect-[4/3] w-full items-center justify-center bg-ink/5">
+          <div className="flex aspect-[4/3] w-full items-center justify-center bg-fg/5">
             <DoorOpen className="h-8 w-8 text-muted" strokeWidth={1.5} />
           </div>
         )}
@@ -57,8 +57,8 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
 
       <div>
         <div className="flex items-start justify-between gap-3">
-          <h1 className="font-display text-xl font-bold leading-snug text-ink">{listing.title}</h1>
-          <span className="price-tag shrink-0 rounded-tag bg-ink py-1.5 pl-5 pr-3 font-mono text-sm font-bold text-paper">
+          <h1 className="font-display text-xl font-bold leading-snug text-fg">{listing.title}</h1>
+          <span className="price-tag shrink-0 rounded-tag bg-accent py-1.5 pl-5 pr-3 font-mono text-sm font-bold text-black shadow-glow-sm">
             {formatPrice(listing.price)}
           </span>
         </div>
@@ -90,14 +90,14 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
         )}
 
         {listing.description && (
-          <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-ink/80">
+          <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-fg/80">
             {listing.description}
           </p>
         )}
 
         {owner && (
-          <div className="mt-5 flex items-center gap-3 rounded-card border border-line bg-white p-3.5">
-            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-ink text-xs font-semibold text-paper">
+          <div className="mt-5 flex items-center gap-3 rounded-card border border-line bg-surface p-3.5">
+            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-surface2 text-xs font-semibold text-fg">
               {owner.photo_url ? (
                 <Image src={owner.photo_url} alt={owner.name} fill className="object-cover" />
               ) : (
@@ -106,7 +106,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
             </div>
             <div className="min-w-0">
               <p className="text-xs text-muted">Inzerát vystavil/a</p>
-              <p className="truncate text-sm font-semibold text-ink">{owner.name || "Student"}</p>
+              <p className="truncate text-sm font-semibold text-fg">{owner.name || "Student"}</p>
             </div>
           </div>
         )}
@@ -116,7 +116,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
         <div className="flex gap-2 border-t border-line pt-4">
           <Link
             href={`/listings/${listing.id}/edit`}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-line py-3 text-sm font-semibold text-ink"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-2xl border border-line py-3 text-sm font-semibold text-fg"
           >
             <Pencil className="h-4 w-4" strokeWidth={1.75} />
             Upravit

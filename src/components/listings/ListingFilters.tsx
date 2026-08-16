@@ -10,7 +10,7 @@ export function ListingFilters({
   defaultRooms?: string;
 }) {
   return (
-    <form action="/listings" method="get" className="rounded-card border border-line bg-white p-3.5">
+    <form action="/listings" method="get" className="rounded-card border border-line bg-surface p-3.5">
       <div className="mb-2.5 flex items-center gap-1.5 text-xs font-medium text-muted">
         <SlidersHorizontal className="h-3.5 w-3.5" strokeWidth={1.75} />
         Filtry
@@ -26,7 +26,7 @@ export function ListingFilters({
             type="text"
             defaultValue={defaultCity}
             placeholder="Lokalita"
-            className="w-full rounded-xl border border-line bg-paper px-3 py-2.5 text-sm text-ink outline-none placeholder:text-muted/60 focus:border-ink"
+            className="w-full rounded-xl border border-line bg-bg px-3 py-2.5 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div className="col-span-1">
@@ -41,7 +41,7 @@ export function ListingFilters({
             min={0}
             defaultValue={defaultMaxPrice}
             placeholder="Max. Kč"
-            className="w-full rounded-xl border border-line bg-paper px-3 py-2.5 text-sm text-ink outline-none placeholder:text-muted/60 focus:border-ink"
+            className="w-full rounded-xl border border-line bg-bg px-3 py-2.5 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div className="col-span-1">
@@ -52,7 +52,7 @@ export function ListingFilters({
             id="rooms"
             name="rooms"
             defaultValue={defaultRooms || ""}
-            className="w-full rounded-xl border border-line bg-paper px-2.5 py-2.5 text-sm text-ink outline-none focus:border-ink"
+            className="w-full rounded-xl border border-line bg-bg px-2.5 py-2.5 text-sm text-fg outline-none focus:border-accent"
           >
             <option value="">Pokoje</option>
             <option value="1">1+</option>
@@ -64,7 +64,7 @@ export function ListingFilters({
       </div>
       <button
         type="submit"
-        className="mt-2.5 w-full rounded-xl bg-ink py-2.5 text-sm font-semibold text-paper transition-transform active:scale-[0.98]"
+        className="mt-2.5 w-full rounded-xl bg-gradient-primary py-2.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98]"
       >
         Použít filtry
       </button>

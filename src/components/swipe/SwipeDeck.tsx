@@ -95,7 +95,7 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
     <div className="flex flex-col items-center">
       <div className="relative aspect-[3/4.3] w-full max-w-sm">
         {loading ? (
-          <div className="flex h-full w-full items-center justify-center rounded-card border border-line bg-white">
+          <div className="flex h-full w-full items-center justify-center rounded-card border border-line bg-surface">
             <Loader2 className="h-5 w-5 animate-spin text-muted" />
           </div>
         ) : visible.length > 0 ? (
@@ -123,7 +123,7 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
                 <button
                   type="button"
                   onClick={loadCandidates}
-                  className="inline-flex items-center gap-1.5 rounded-2xl bg-ink px-5 py-2.5 text-sm font-semibold text-paper"
+                  className="inline-flex items-center gap-1.5 rounded-2xl bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-black shadow-glow-sm"
                 >
                   <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
                   Obnovit

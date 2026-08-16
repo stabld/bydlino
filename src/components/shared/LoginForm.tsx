@@ -43,8 +43,9 @@ export function LoginForm() {
       <div className="mx-auto w-full max-w-sm">
         <div className="mb-10 text-center">
           <div className="mb-1 flex items-center justify-center gap-1.5">
-            <span className="font-display text-3xl font-bold tracking-tight text-ink">Roomy</span>
-            <span className="h-2 w-2 rounded-full bg-accent" />
+            <span className="bg-gradient-primary bg-clip-text font-display text-3xl font-bold tracking-tight text-transparent">
+              Bydlino
+            </span>
           </div>
           <p className="text-sm text-muted">Pokoje a spolubydlící pro studenty v Brně</p>
         </div>
@@ -62,7 +63,7 @@ export function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="jana@vut.cz"
-              className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-ink"
+              className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
             />
           </div>
           <div>
@@ -77,7 +78,7 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-ink"
+              className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
             />
           </div>
 
@@ -86,7 +87,7 @@ export function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-ink py-3.5 text-sm font-semibold text-paper transition-transform active:scale-[0.98] disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
           >
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -101,7 +102,7 @@ export function LoginForm() {
 
         <p className="mt-6 text-center text-sm text-muted">
           Nemáš účet?{" "}
-          <Link href="/register" className="font-semibold text-ink underline underline-offset-2">
+          <Link href="/register" className="font-semibold text-fg underline underline-offset-2">
             Zaregistruj se
           </Link>
         </p>

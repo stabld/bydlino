@@ -25,7 +25,7 @@ export default async function EditListingPage({ params }: { params: { id: string
   return (
     <div className="space-y-5">
       <BackLink href={`/listings/${listing.id}`} label="Zpět na inzerát" />
-      <h1 className="font-display text-2xl font-bold text-ink">Upravit inzerát</h1>
+      <h1 className="font-display text-2xl font-bold text-fg">Upravit inzerát</h1>
       <ListingForm listing={listing} />
     </div>
   );

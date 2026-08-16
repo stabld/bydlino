@@ -23,7 +23,7 @@ export default async function ProfilePage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="font-display text-2xl font-bold text-ink">Profil</h1>
+        <h1 className="font-display text-2xl font-bold text-fg">Profil</h1>
         <p className="mt-0.5 text-sm text-muted">Tohle vidí ostatní studenti u tvých swipe karet.</p>
       </div>
       <ProfileForm profile={profile} contacts={contacts} />

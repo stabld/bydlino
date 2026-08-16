@@ -101,14 +101,14 @@ export function ProfileForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4 pb-6">
       <div className="flex justify-center">
-        <label className="relative flex h-24 w-24 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-line bg-ink text-paper">
+        <label className="relative flex h-24 w-24 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-line bg-gradient-primary text-black">
           {displayPhoto ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={displayPhoto} alt="" className="h-full w-full object-cover" />
           ) : (
             <span className="font-display text-xl font-bold">{initials(name || "?")}</span>
           )}
-          <span className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-ink/70 py-1.5 text-[10px] font-medium text-paper">
+          <span className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-black/70 py-1.5 text-[10px] font-medium text-white">
             <Camera className="h-3 w-3" strokeWidth={2} />
             Změnit
           </span>
@@ -130,7 +130,7 @@ export function ProfileForm({
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -147,7 +147,7 @@ export function ProfileForm({
             inputMode="numeric"
             value={age}
             onChange={(e) => setAge(e.target.value)}
-            className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div>
@@ -162,7 +162,7 @@ export function ProfileForm({
             value={maxBudget}
             onChange={(e) => setMaxBudget(e.target.value)}
             placeholder="9000"
-            className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
       </div>
@@ -177,7 +177,7 @@ export function ProfileForm({
             value={university}
             onChange={(e) => setUniversity(e.target.value)}
             placeholder="VUT"
-            className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div>
@@ -189,7 +189,7 @@ export function ProfileForm({
             value={faculty}
             onChange={(e) => setFaculty(e.target.value)}
             placeholder="FIT"
-            className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
       </div>
@@ -203,7 +203,7 @@ export function ProfileForm({
           value={preferredLocation}
           onChange={(e) => setPreferredLocation(e.target.value)}
           placeholder="Brno-střed"
-          className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -217,7 +217,7 @@ export function ProfileForm({
           value={bio}
           onChange={(e) => setBio(e.target.value)}
           placeholder="Pár vět o tobě — obor, zvyky, co hledáš za spolubydlení..."
-          className="w-full resize-none rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+          className="w-full resize-none rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -230,7 +230,7 @@ export function ProfileForm({
           value={tagsInput}
           onChange={(e) => setTagsInput(e.target.value)}
           placeholder="nekuřák/ka, ranní ptáče, čistotný/á"
-          className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -244,7 +244,7 @@ export function ProfileForm({
             value={instagram}
             onChange={(e) => setInstagram(e.target.value)}
             placeholder="@jana.novak"
-            className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div>
@@ -256,7 +256,7 @@ export function ProfileForm({
             value={facebook}
             onChange={(e) => setFacebook(e.target.value)}
             placeholder="Jana Nováková"
-            className="w-full rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-ink"
+            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
       </div>
@@ -269,7 +269,7 @@ export function ProfileForm({
       <button
         type="submit"
         disabled={loading}
-        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-paper transition-transform active:scale-[0.98] disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
       >
         {loading ? (
           <Loader2 className="h-4 w-4 animate-spin" />

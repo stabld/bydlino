@@ -18,7 +18,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="min-h-dvh bg-paper">
+    <div className="min-h-dvh bg-bg">
       <Header matchCount={matchCount} />
       <main className="mx-auto max-w-md px-5 pb-28 pt-5">{children}</main>
       <BottomNav />

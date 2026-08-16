@@ -11,16 +11,16 @@ export function ListingCard({ listing }: { listing: Listing }) {
   return (
     <Link
       href={`/listings/${listing.id}`}
-      className="group block overflow-hidden rounded-card border border-line bg-white transition-transform active:scale-[0.98]"
+      className="group block overflow-hidden rounded-card border border-line bg-surface shadow-card transition-all hover:border-accent/40 active:scale-[0.99]"
     >
-      <div className="relative aspect-[4/3] w-full bg-ink/5">
+      <div className="relative aspect-[4/3] w-full bg-surface2">
         {cover ? (
           <Image
             src={cover}
             alt={listing.title}
             fill
             sizes="(max-width: 480px) 100vw, 320px"
-            className="object-cover"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
@@ -28,23 +28,23 @@ export function ListingCard({ listing }: { listing: Listing }) {
           </div>
         )}
 
-        <div className="price-tag absolute left-3 top-3 rounded-tag bg-ink py-1.5 pl-5 pr-3 font-mono text-xs font-bold text-paper">
+        <div className="price-tag absolute left-3 top-3 rounded-tag bg-accent py-1.5 pl-5 pr-3 font-mono text-xs font-bold text-black shadow-glow-sm">
           {formatPrice(listing.price)}
         </div>
       </div>
 
       <div className="p-4">
-        <h3 className="font-display text-[15px] font-semibold leading-snug text-ink">
+        <h3 className="font-display text-[15px] font-semibold leading-snug text-fg">
           {listing.title}
         </h3>
 
-        <div className="mt-1 flex items-center gap-1 text-xs text-muted">
+        <div className="mt-1.5 flex items-center gap-1 text-xs text-muted">
           <MapPin className="h-3.5 w-3.5 shrink-0" strokeWidth={1.75} />
           <span className="truncate">
             {listing.location ? `${listing.location}, ` : ""}
             {listing.city}
           </span>
-          <span className="mx-1 text-line">·</span>
+          <span className="mx-1 opacity-40">·</span>
           <span className="shrink-0">{listing.rooms}+1</span>
         </div>
 

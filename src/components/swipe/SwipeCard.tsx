@@ -62,7 +62,7 @@ export function SwipeCard({
 
   return (
     <motion.div
-      className="badge-hole absolute inset-0 overflow-hidden rounded-card border border-line bg-white shadow-[0_8px_30px_-8px_rgba(17,17,19,0.25)]"
+      className="badge-hole absolute inset-0 overflow-hidden rounded-card border border-line bg-surface shadow-glow"
       style={active ? { x, rotate } : undefined}
       initial={false}
       animate={active ? { scale: 1, y: 0 } : stackStyle}
@@ -83,51 +83,51 @@ export function SwipeCard({
             priority={stackIndex === 0}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-ink/5">
-            <span className="font-display text-5xl font-bold text-ink/15">{initials(profile.name)}</span>
+          <div className="flex h-full w-full items-center justify-center bg-surface2">
+            <span className="font-display text-5xl font-bold text-fg/15">{initials(profile.name)}</span>
           </div>
         )}
 
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/5" />
 
         {active && (
           <>
             <motion.div
               style={{ opacity: likeOpacity }}
-              className="pointer-events-none absolute right-5 top-8 rotate-[-12deg] rounded-lg border-[3px] border-gold px-3 py-1 font-mono text-sm font-bold uppercase tracking-wide text-gold"
+              className="pointer-events-none absolute right-5 top-8 rotate-[-12deg] rounded-lg border-[3px] border-accent px-3 py-1 font-mono text-sm font-bold uppercase tracking-wide text-accent shadow-glow"
             >
               Líbí se mi
             </motion.div>
             <motion.div
               style={{ opacity: passOpacity }}
-              className="pointer-events-none absolute left-5 top-8 rotate-[12deg] rounded-lg border-[3px] border-paper px-3 py-1 font-mono text-sm font-bold uppercase tracking-wide text-paper"
+              className="pointer-events-none absolute left-5 top-8 rotate-[12deg] rounded-lg border-[3px] border-white/70 px-3 py-1 font-mono text-sm font-bold uppercase tracking-wide text-white/90"
             >
               Další
             </motion.div>
           </>
         )}
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-5 text-paper">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-5 text-white">
           <div className="flex items-baseline gap-2">
             <h3 className="font-display text-2xl font-bold leading-none">{profile.name}</h3>
-            {profile.age && <span className="text-lg font-medium text-paper/80">{profile.age}</span>}
+            {profile.age && <span className="text-lg font-medium text-white/80">{profile.age}</span>}
           </div>
 
           {(profile.university || profile.faculty) && (
-            <div className="mt-2 inline-flex items-center gap-1.5 rounded-tag bg-paper/15 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wide backdrop-blur-sm">
+            <div className="mt-2 inline-flex items-center gap-1.5 rounded-tag bg-white/15 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wide backdrop-blur-sm">
               <GraduationCap className="h-3 w-3" strokeWidth={2} />
               {[profile.faculty, profile.university].filter(Boolean).join(" · ")}
             </div>
           )}
 
-          {profile.bio && <p className="mt-2.5 line-clamp-2 text-sm text-paper/90">{profile.bio}</p>}
+          {profile.bio && <p className="mt-2.5 line-clamp-2 text-sm text-white/90">{profile.bio}</p>}
 
           {profile.lifestyle_tags.length > 0 && (
             <div className="mt-2.5 flex flex-wrap gap-1.5">
               {profile.lifestyle_tags.slice(0, 4).map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-tag bg-paper/15 px-2.5 py-0.5 text-[11px] font-medium backdrop-blur-sm"
+                  className="rounded-tag bg-white/15 px-2.5 py-0.5 text-[11px] font-medium backdrop-blur-sm"
                 >
                   {tag}
                 </span>
@@ -136,7 +136,7 @@ export function SwipeCard({
           )}
 
           {(profile.preferred_location || profile.max_budget) && (
-            <p className="mt-2 text-xs text-paper/70">
+            <p className="mt-2 text-xs text-white/70">
               {profile.preferred_location}
               {profile.preferred_location && profile.max_budget ? " · " : ""}
               {profile.max_budget ? `do ${profile.max_budget.toLocaleString("cs-CZ")} Kč` : ""}
