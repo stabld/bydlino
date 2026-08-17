@@ -41,7 +41,7 @@ export function BottomNav() {
               <span
                className={cn(
  "h-1 w-4 rounded-full transition-opacity",
-                  active ? "bg-gradient-primary opacity-100 " : "opacity-0"
+                  active ? "bg-accent opacity-100" : "opacity-0"
                 )}
               />
             </Link>

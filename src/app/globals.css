@@ -3,9 +3,37 @@
 @tailwind utilities;
 
 @layer base {
+  /* Tmavý režim je výchozí. Světlý se zapne atributem data-theme="light". */
+  :root {
+    --c-bg: 11 11 13;
+    --c-surface: 20 20 22;
+    --c-surface2: 28 28 32;
+    --c-line: 44 44 49;
+    --c-fg: 250 250 249;
+    --c-muted: 161 161 166;
+    --c-accent: 245 158 11;
+    --c-success: 52 211 153;
+    --c-danger: 248 113 113;
+    --c-shadow: 0 0 0;
+    color-scheme: dark;
+  }
+
+  [data-theme="light"] {
+    --c-bg: 250 250 248;
+    --c-surface: 255 255 255;
+    --c-surface2: 243 243 240;
+    --c-line: 226 226 221;
+    --c-fg: 24 24 27;
+    --c-muted: 110 110 118;
+    --c-accent: 202 110 4;
+    --c-success: 5 150 105;
+    --c-danger: 220 38 38;
+    --c-shadow: 30 30 30;
+    color-scheme: light;
+  }
+
   html {
     -webkit-tap-highlight-color: transparent;
-    color-scheme: dark;
   }
 
   body {
@@ -23,14 +51,14 @@
   }
 
   *:focus-visible {
-    outline: 2px solid theme("colors.accent.DEFAULT");
+    outline: 2px solid rgb(var(--c-accent));
     outline-offset: 2px;
     border-radius: 6px;
   }
 
   input::placeholder,
   textarea::placeholder {
-    color: theme("colors.muted");
+    color: rgb(var(--c-muted));
     opacity: 0.65;
   }
 
@@ -60,8 +88,8 @@
     border-radius: 999px;
     background: radial-gradient(
       ellipse at center,
-      rgba(245, 158, 11, 0.16) 0%,
-      rgba(245, 158, 11, 0) 70%
+      rgb(var(--c-accent) / 0.14) 0%,
+      rgb(var(--c-accent) / 0) 70%
     );
   }
 
@@ -78,8 +106,8 @@
     width: 13px;
     height: 13px;
     border-radius: 999px;
-    background: theme("colors.bg");
-    border: 2px solid rgba(255, 255, 255, 0.25);
+    background: rgb(var(--c-bg));
+    border: 2px solid rgb(var(--c-line));
     z-index: 20;
   }
 

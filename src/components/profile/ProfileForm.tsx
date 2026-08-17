@@ -106,7 +106,7 @@ export function ProfileForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4 pb-6">
       <div className="flex justify-center">
-        <label className="relative flex h-24 w-24 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-line bg-gradient-primary text-black">
+        <label className="relative flex h-24 w-24 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-line bg-surface2 text-fg">
           {displayPhoto ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={displayPhoto} alt="" className="h-full w-full object-cover" />
@@ -274,7 +274,7 @@ export function ProfileForm({
       <button
         type="submit"
         disabled={loading}
-       className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98] disabled:opacity-60"
+       className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98] disabled:opacity-60"
       >
         {loading ? (
           <Loader2 className="h-4 w-4 animate-spin" />

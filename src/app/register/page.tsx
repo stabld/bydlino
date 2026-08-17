@@ -54,7 +54,7 @@ export default function RegisterPage() {
   if (needsConfirmation) {
     return (
       <div className="flex min-h-dvh flex-col items-center justify-center px-6 py-12 text-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-primary-soft">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-soft">
           <MailCheck className="h-6 w-6 text-accent" strokeWidth={1.75} />
         </div>
         <h1 className="mt-5 font-display text-xl font-semibold text-fg">Zkontroluj e-mail</h1>
@@ -64,7 +64,7 @@ export default function RegisterPage() {
         </p>
         <Link
           href="/login"
-         className="mt-6 rounded-2xl bg-gradient-primary px-6 py-3 text-sm font-semibold text-black"
+         className="mt-6 rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-black"
         >
           Zpět na přihlášení
         </Link>
@@ -137,7 +137,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-           className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98] disabled:opacity-60"
+           className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98] disabled:opacity-60"
           >
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

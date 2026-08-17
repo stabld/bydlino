@@ -30,12 +30,28 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#0A0A10",
+  themeColor: "#0B0B0D",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="cs" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    <html
+      lang="cs"
+      data-theme="dark"
+      className={`${display.variable} ${body.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/*
+          Nastaví režim ještě před vykreslením, jinak by při načtení
+          na okamžik probliklo tmavé pozadí u světlého režimu.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem("theme");if(!t){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}document.documentElement.dataset.theme=t}catch(e){}`,
+          }}
+        />
+      </head>
       <body>
         <div className="ambient-glow" aria-hidden="true" />
         {children}

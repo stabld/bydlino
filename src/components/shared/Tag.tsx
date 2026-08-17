@@ -15,7 +15,7 @@ export function Tag({
         "inline-flex items-center rounded-tag px-3 py-1 text-xs font-medium leading-none",
         variant === "default" && "bg-fg/8 text-fg/75 border border-line",
         variant === "accent" && "bg-accent-soft text-accent",
-        variant === "mono" && "font-mono uppercase tracking-wide bg-gradient-primary text-black",
+        variant === "mono" && "font-mono uppercase tracking-wide bg-accent text-black",
         className
       )}
     >

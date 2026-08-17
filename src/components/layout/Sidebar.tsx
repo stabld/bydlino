@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Flame, Bookmark, CircleUserRound, LogOut, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 const ITEMS = [
   { href: "/swipe", label: "Procházet", icon: Flame },
@@ -18,9 +19,12 @@ export function Sidebar() {
 
   return (
     <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-line bg-surface/40 px-4 py-6 lg:flex">
-      <Link href="/swipe" className="px-3">
-        <span className="font-display text-2xl font-bold tracking-tight text-accent">Bydlino</span>
-      </Link>
+      <div className="flex items-center justify-between px-3">
+        <Link href="/swipe">
+          <span className="font-display text-2xl font-bold tracking-tight text-accent">Bydlino</span>
+        </Link>
+        <ThemeToggle />
+      </div>
 
       <nav className="mt-8 flex flex-col gap-1">
         {ITEMS.map(({ href, label, icon: Icon }) => {

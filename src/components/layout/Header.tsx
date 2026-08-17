@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LogOut } from "lucide-react";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 export function Header() {
   return (
@@ -12,6 +13,7 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-1">
+          <ThemeToggle />
           <form action="/auth/signout" method="post">
             <button
               type="submit"

@@ -87,7 +87,7 @@ export function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-           className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98] disabled:opacity-60"
+           className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98] disabled:opacity-60"
           >
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
