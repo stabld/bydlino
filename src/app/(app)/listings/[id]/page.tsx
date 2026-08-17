@@ -37,11 +37,13 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
 
   const isOwner = user?.id === listing.owner_id;
 
-  const { data: owner } = await supabase
-    .from("profiles")
-    .select("id, name, photo_url")
-    .eq("id", listing.owner_id)
-    .maybeSingle<Pick<Profile, "id" | "name" | "photo_url">>();
+  const { data: owner } = user
+    ? await supabase
+        .from("profiles")
+        .select("id, name, photo_url")
+        .eq("id", listing.owner_id)
+        .maybeSingle<Pick<Profile, "id" | "name" | "photo_url">>()
+    : { data: null };
 
   const { data: savedRow } = user
     ? await supabase
@@ -64,7 +66,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
       : { data: null };
 
   // Kontakt na majitele — RLS ho vrátí jen tehdy, když na něj mám nárok.
-  const { data: ownerContacts } = !isOwner
+  const { data: ownerContacts } = user && !isOwner
     ? await supabase
         .from("profile_contacts")
         .select("*")
@@ -170,6 +172,32 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
           </div>
         )}
       </div>
+
+      {!user && (
+        <div className="rounded-card border border-line bg-surface p-5">
+          <h2 className="font-display text-base font-semibold text-fg">
+            Chceš se ozvat majiteli?
+          </h2>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted">
+            Kontakt vidí jen přihlášení. Účet je zdarma a zabere minutu — navíc si uložíš
+            byty, které se ti líbí.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/register"
+              className="rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-sm"
+            >
+              Založit účet
+            </Link>
+            <Link
+              href="/login"
+              className="rounded-2xl border border-line px-5 py-2.5 text-sm font-semibold text-fg"
+            >
+              Přihlásit se
+            </Link>
+          </div>
+        </div>
+      )}
 
       {!isOwner && user && (
         <div className="space-y-2.5">

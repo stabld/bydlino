@@ -20,7 +20,10 @@ import { ListingSwipeCard, type SwipeSignal } from "./ListingSwipeCard";
 import { ActionButtons } from "./ActionButtons";
 import { EmptyState } from "@/components/shared/EmptyState";
 
-export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
+/** Kolik karet si host projde, než ho vyzveme k registraci. */
+const GUEST_SWIPE_LIMIT = 5;
+
+export function SwipeDeck({ currentUserId }: { currentUserId: string | null }) {
   const toast = useToast();
 
   const [deck, setDeck] = useState<Listing[] | null>(null);
@@ -29,28 +32,34 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
   const [signal, setSignal] = useState<SwipeSignal | null>(null);
   const [lastSwiped, setLastSwiped] = useState<Listing | null>(null);
   const [likedCount, setLikedCount] = useState(0);
+  const [guestSwipes, setGuestSwipes] = useState(0);
 
   const loadDeck = useCallback(async () => {
     setLoading(true);
     const supabase = createClient();
 
-    // Vlastní inzeráty a už odswipované do balíčku nepatří.
-    const { data: swipedRows } = await supabase
-      .from("listing_swipes")
-      .select("listing_id")
-      .eq("user_id", currentUserId);
+    let query = supabase.from("listings").select("*");
 
-    const swipedIds = (swipedRows ?? []).map((r) => r.listing_id);
+    if (currentUserId) {
+      // Vlastní inzeráty a už odswipované do balíčku nepatří.
+      const { data: swipedRows } = await supabase
+        .from("listing_swipes")
+        .select("listing_id")
+        .eq("user_id", currentUserId);
 
-    let query = supabase.from("listings").select("*").neq("owner_id", currentUserId);
-    if (swipedIds.length) {
-      query = query.not("id", "in", `(${swipedIds.join(",")})`);
- }
+      const swipedIds = (swipedRows ?? []).map((r) => r.listing_id);
+
+      query = query.neq("owner_id", currentUserId);
+      if (swipedIds.length) {
+        query = query.not("id", "in", `(${swipedIds.join(",")})`);
+      }
+    }
 
     const { data: listings } = await query.limit(50).returns<Listing[]>();
 
     setDeck([...(listings ?? [])].sort(() => Math.random() - 0.5));
     setLastSwiped(null);
+    setGuestSwipes(0);
     setLoading(false);
  }, [currentUserId]);
 
@@ -82,6 +91,14 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
     setDeck((prev) => (prev ? prev.slice(1) : prev));
     setLastSwiped(target);
 
+    // Host nemá kam swipe uložit — jen počítáme, kolik jich prošel.
+    if (!currentUserId) {
+      setGuestSwipes((n) => n + 1);
+      if (direction === "like") setLikedCount((c) => c + 1);
+      setBusy(false);
+      return;
+    }
+
     const supabase = createClient();
     const { error } = await supabase
       .from("listing_swipes")
@@ -104,6 +121,14 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
   async function undoLast() {
     if (!lastSwiped || busy) return;
     setBusy(true);
+
+    if (!currentUserId) {
+      setDeck((prev) => (prev ? [lastSwiped, ...prev] : [lastSwiped]));
+      setLastSwiped(null);
+      setGuestSwipes((n) => Math.max(0, n - 1));
+      setBusy(false);
+      return;
+    }
 
     const supabase = createClient();
     const { error } = await supabase
@@ -128,7 +153,8 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
     setSignal({ direction, token: Date.now() });
  }
 
-  const visible = deck?.slice(0, 3) ?? [];
+  const hitGuestWall = !currentUserId && guestSwipes >= GUEST_SWIPE_LIMIT;
+  const visible = hitGuestWall ? [] : (deck?.slice(0, 3) ?? []);
   const current = visible[0];
 
   return (
@@ -139,6 +165,31 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
           <div className="flex h-full w-full flex-col items-center justify-center gap-3 rounded-card border border-line bg-surface">
             <Loader2 className="h-5 w-5 animate-spin text-accent" />
             <p className="text-sm text-muted">Načítám nabídky…</p>
+          </div>
+        ) : hitGuestWall ? (
+          <div className="flex h-full w-full flex-col items-center justify-center rounded-card border border-line bg-surface px-6 text-center">
+            <p className="text-3xl font-bold text-accent">{likedCount}</p>
+            <p className="mt-1 text-sm text-muted">
+              {likedCount === 1 ? "byt se ti líbil" : "bytů se ti líbilo"}
+            </p>
+            <h3 className="mt-5 font-display text-lg font-semibold text-fg">
+              Založ si účet a nezmizí ti
+            </h3>
+            <p className="mt-2 max-w-[260px] text-sm leading-relaxed text-muted">
+              Uložíme ti, co sis vybral, ukážeme kontakt na majitele a nabídneme zbytek nabídky.
+            </p>
+            <Link
+              href="/register"
+              className="mt-5 w-full max-w-[240px] rounded-2xl bg-accent py-3 text-sm font-semibold text-black shadow-sm"
+            >
+              Založit účet
+            </Link>
+            <Link
+              href="/login"
+              className="mt-2 text-sm font-medium text-muted transition-colors hover:text-fg"
+            >
+              Už mám účet
+            </Link>
           </div>
         ) : visible.length > 0 ? (
           [...visible].reverse().map((listing, i) => {
@@ -217,6 +268,12 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
               </Link>
             )}
           </div>
+
+          {!currentUserId && (
+            <p className="mt-4 text-center text-xs text-muted">
+              Zbývá {GUEST_SWIPE_LIMIT - guestSwipes} z {GUEST_SWIPE_LIMIT} ukázkových karet
+            </p>
+          )}
 
           <p className="mt-4 hidden text-center text-xs text-muted lg:block">
             Klávesy: <kbd className="rounded border border-line px-1.5 py-0.5">←</kbd> přeskočit{" "}

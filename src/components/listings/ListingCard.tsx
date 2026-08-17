@@ -6,7 +6,15 @@ import { formatPrice } from "@/lib/utils";
 import { Tag } from "@/components/shared/Tag";
 import { SaveButton } from "@/components/listings/SaveButton";
 
-export function ListingCard({ listing, saved = false }: { listing: Listing; saved?: boolean }) {
+export function ListingCard({
+  listing,
+  saved = false,
+  canSave = true,
+}: {
+  listing: Listing;
+  saved?: boolean;
+  canSave?: boolean;
+}) {
   const cover = listing.photos[0];
 
   return (
@@ -29,9 +37,11 @@ export function ListingCard({ listing, saved = false }: { listing: Listing; save
           </div>
         )}
 
-        <div className="absolute right-3 top-3">
-          <SaveButton listingId={listing.id} initiallySaved={saved} />
-        </div>
+        {canSave && (
+          <div className="absolute right-3 top-3">
+            <SaveButton listingId={listing.id} initiallySaved={saved} />
+          </div>
+        )}
       </div>
 
       <div className="p-4">

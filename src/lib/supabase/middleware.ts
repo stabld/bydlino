@@ -1,11 +1,21 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PUBLIC_PATHS = ["/login", "/register", "/auth/callback"];
+/** Cesty dostupné i bez přihlášení. */
+const PUBLIC_PATHS = ["/", "/login", "/register", "/auth/callback", "/swipe", "/listings"];
+
+/** Cesty, které vyžadují účet, i když jsou uvnitř veřejné sekce. */
+const PROTECTED_PREFIXES = ["/listings/new", "/saved", "/profile"];
+
+function isProtected(pathname: string): boolean {
+  if (PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))) return true;
+  // /listings/<id>/edit
+  if (/^\/listings\/[^/]+\/edit\/?$/.test(pathname)) return true;
+  return false;
+}
 
 function isPublicPath(pathname: string): boolean {
-  // "/" je veřejná landing page pro nepřihlášené.
-  if (pathname === "/") return true;
+  if (isProtected(pathname)) return false;
   return PUBLIC_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 }
 

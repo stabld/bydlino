@@ -196,9 +196,12 @@ create policy "contacts_update_own" on public.profile_contacts
   with check (auth.uid() = user_id);
 
 -- --- listings ----------------------------------------------------------------
+-- Inzeráty jsou veřejné i pro nepřihlášené (anon), aby si člověk mohl nabídku
+-- prohlédnout ještě před registrací. Kontakty a profily veřejné NEJSOU.
 drop policy if exists "listings_select_authenticated" on public.listings;
-create policy "listings_select_authenticated" on public.listings
-  for select to authenticated
+drop policy if exists "listings_select_public" on public.listings;
+create policy "listings_select_public" on public.listings
+  for select to anon, authenticated
   using (true);
 
 drop policy if exists "listings_insert_own" on public.listings;

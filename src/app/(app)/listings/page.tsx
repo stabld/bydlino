@@ -90,7 +90,12 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
         <>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {listings.slice(0, 4).map((listing) => (
-              <ListingCard key={listing.id} listing={listing} saved={savedIds.has(listing.id)} />
+              <ListingCard
+                key={listing.id}
+                listing={listing}
+                saved={savedIds.has(listing.id)}
+                canSave={Boolean(user)}
+              />
             ))}
           </div>
 
@@ -99,7 +104,12 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
           {listings.length > 4 && (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {listings.slice(4).map((listing) => (
-                <ListingCard key={listing.id} listing={listing} saved={savedIds.has(listing.id)} />
+                <ListingCard
+                key={listing.id}
+                listing={listing}
+                saved={savedIds.has(listing.id)}
+                canSave={Boolean(user)}
+              />
               ))}
             </div>
           )}

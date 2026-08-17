@@ -5,14 +5,19 @@ import { usePathname } from "next/navigation";
 import { Home, Flame, Bookmark, CircleUserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const ITEMS = [
+const PUBLIC_ITEMS = [
   { href: "/swipe", label: "Procházet", icon: Flame },
   { href: "/listings", label: "Nabídky", icon: Home },
+];
+
+const PRIVATE_ITEMS = [
   { href: "/saved", label: "Uložené", icon: Bookmark },
   { href: "/profile", label: "Profil", icon: CircleUserRound },
 ];
 
-export function BottomNav() {
+const GUEST_ITEMS = [{ href: "/register", label: "Účet", icon: CircleUserRound }];
+
+export function BottomNav({ isLoggedIn }: { isLoggedIn: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -22,7 +27,7 @@ export function BottomNav() {
       aria-label="Hlavní navigace"
     >
       <div className="mx-auto flex max-w-md items-stretch justify-around px-2">
-        {ITEMS.map(({ href, label, icon: Icon }) => {
+        {[...PUBLIC_ITEMS, ...(isLoggedIn ? PRIVATE_ITEMS : GUEST_ITEMS)].map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);
           return (
             <Link

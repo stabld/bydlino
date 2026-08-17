@@ -2,19 +2,22 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Flame, Bookmark, CircleUserRound, LogOut, Plus } from "lucide-react";
+import { Home, Flame, Bookmark, CircleUserRound, LogOut, LogIn, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
-const ITEMS = [
+const PUBLIC_ITEMS = [
   { href: "/swipe", label: "Procházet", icon: Flame },
   { href: "/listings", label: "Nabídky", icon: Home },
+];
+
+const PRIVATE_ITEMS = [
   { href: "/saved", label: "Uložené", icon: Bookmark },
   { href: "/profile", label: "Profil", icon: CircleUserRound },
 ];
 
 /** Boční navigace pro desktop. Na mobilu se místo ní zobrazuje BottomNav. */
-export function Sidebar() {
+export function Sidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -27,7 +30,7 @@ export function Sidebar() {
       </div>
 
       <nav className="mt-8 flex flex-col gap-1">
-        {ITEMS.map(({ href, label, icon: Icon }) => {
+        {[...PUBLIC_ITEMS, ...(isLoggedIn ? PRIVATE_ITEMS : [])].map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);
           return (
             <Link

@@ -54,8 +54,8 @@ export default function LandingPage() {
         </h1>
 
         <p className="mt-4 text-[15px] leading-relaxed text-muted lg:text-base">
-          Pokoje a byty pro studenty v Brně. Projedeš nabídku za pět minut, co tě zaujme si
-          uložíš a majiteli napíšeš napřímo.
+          Pokoje a byty pro studenty v Brně. Projedeš nabídku za pět minut — a účet
+          potřebuješ, až když se budeš chtít majiteli ozvat.
         </p>
 
         <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
