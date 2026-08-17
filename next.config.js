@@ -8,6 +8,11 @@ const nextConfig = {
         hostname: "*.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        // Fotky v ukázkových (seed) inzerátech. Po smazání dema můžeš odebrat.
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
     ],
   },
 };
