@@ -60,17 +60,17 @@ export default function LandingPage() {
 
         <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
           <Link
-            href="/register"
-           className="flex items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-black shadow-sm transition-transform active:scale-[0.98]"
+            href="/swipe"
+            className="flex items-center justify-center gap-2 rounded-2xl bg-accent px-6 py-3.5 text-sm font-semibold text-black shadow-sm transition-transform active:scale-[0.98]"
           >
-            Založit účet
+            Prohlédnout byty
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             href="/login"
-           className="flex items-center justify-center rounded-2xl border border-line py-3.5 text-sm font-semibold text-fg transition-colors hover:border-accent/50"
+            className="flex items-center justify-center rounded-2xl border border-line px-6 py-3.5 text-sm font-semibold text-fg transition-colors hover:border-accent/50"
           >
-            Už mám účet
+            Přihlásit se
           </Link>
         </div>
         </div>
@@ -99,7 +99,7 @@ export default function LandingPage() {
                 {["balkón", "po rekonstrukci", "MHD 3 min"].map((t) => (
                   <span
                     key={t}
-                   className="rounded-tag bg-white/15 px-2.5 py-0.5 text-[11px] font-medium backdrop-blur-sm"
+                    className="rounded-tag bg-white/15 px-2.5 py-0.5 text-[11px] font-medium backdrop-blur-sm"
                   >
                     {t}
                   </span>
@@ -131,9 +131,9 @@ export default function LandingPage() {
         </p>
         <Link
           href="/register"
-         className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-black shadow-sm"
+          className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-black shadow-sm"
         >
-          Založit účet
+          Přidat inzerát
           <ArrowRight className="h-4 w-4" />
         </Link>
       </section>

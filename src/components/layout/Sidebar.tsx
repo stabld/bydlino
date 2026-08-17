@@ -37,7 +37,7 @@ export function Sidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
               key={href}
               href={href}
               aria-current={active ? "page" : undefined}
-             className={cn(
+              className={cn(
  "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition-colors",
                 active
                   ? "bg-accent-soft text-accent"
@@ -53,7 +53,7 @@ export function Sidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
 
       <Link
         href="/listings/new"
-       className="mt-6 flex items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-black transition-transform active:scale-[0.98]"
+        className="mt-6 flex items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-black transition-transform active:scale-[0.98]"
       >
         <Plus className="h-4 w-4" strokeWidth={2.25} />
         Přidat inzerát
@@ -71,7 +71,7 @@ export function Sidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
         <form action="/auth/signout" method="post">
           <button
             type="submit"
-           className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-fg/5 hover:text-fg"
+            className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-fg/5 hover:text-fg"
           >
             <LogOut className="h-[18px] w-[18px]" strokeWidth={1.9} />
             Odhlásit se

@@ -115,7 +115,7 @@ export default async function SavedPage() {
             action={
               <Link
                 href="/swipe"
-               className="rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-sm"
+                className="rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-sm"
               >
                 Procházet byty
               </Link>
@@ -139,7 +139,7 @@ export default async function SavedPage() {
               <Link
                 key={interest.id}
                 href={`/listings/${listing.id}`}
-               className="block rounded-card border border-line bg-surface p-4 transition-colors hover:border-accent/40"
+                className="block rounded-card border border-line bg-surface p-4 transition-colors hover:border-accent/40"
               >
                 <div className="flex items-center gap-3">
                   <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-surface2">

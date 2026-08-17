@@ -22,7 +22,7 @@ export function BottomNav({ isLoggedIn }: { isLoggedIn: boolean }) {
 
   return (
     <nav
-     className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-bg/85 backdrop-blur-md supports-[backdrop-filter]:bg-bg/65"
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-bg/85 backdrop-blur-md supports-[backdrop-filter]:bg-bg/65"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       aria-label="Hlavní navigace"
     >
@@ -33,18 +33,18 @@ export function BottomNav({ isLoggedIn }: { isLoggedIn: boolean }) {
             <Link
               key={href}
               href={href}
-             className="flex flex-1 flex-col items-center gap-1 py-2.5"
+              className="flex flex-1 flex-col items-center gap-1 py-2.5"
               aria-current={active ? "page" : undefined}
             >
               <Icon
-               className={cn("h-5 w-5 transition-colors", active ? "text-fg" : "text-muted")}
+                className={cn("h-5 w-5 transition-colors", active ? "text-fg" : "text-muted")}
                 strokeWidth={active ? 2.25 : 1.75}
               />
               <span className={cn("text-[11px] font-medium", active ? "text-fg" : "text-muted")}>
                 {label}
               </span>
               <span
-               className={cn(
+                className={cn(
  "h-1 w-4 rounded-full transition-opacity",
                   active ? "bg-accent opacity-100" : "opacity-0"
                 )}

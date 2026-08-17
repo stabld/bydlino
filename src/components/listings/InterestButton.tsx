@@ -105,7 +105,7 @@ export function InterestButton({
               {contacts?.phone && (
                 <a
                   href={`tel:${contacts.phone.replace(/\s/g, "")}`}
-                 className="inline-flex items-center gap-1.5 rounded-tag border border-line bg-surface px-3 py-1.5 text-xs font-medium text-fg"
+                  className="inline-flex items-center gap-1.5 rounded-tag border border-line bg-surface px-3 py-1.5 text-xs font-medium text-fg"
                 >
                   <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
                   {contacts.phone}
@@ -127,7 +127,7 @@ export function InterestButton({
       <button
         type="button"
         onClick={() => setOpen(true)}
-       className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-black shadow-sm transition-transform active:scale-[0.98]"
+        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-black shadow-sm transition-transform active:scale-[0.98]"
       >
         <Send className="h-4 w-4" strokeWidth={2} />
         Mám zájem
@@ -146,7 +146,7 @@ export function InterestButton({
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Ahoj, je ten pokoj ještě volný? Studuju na FI a hledám od září…"
-       className="w-full resize-none rounded-2xl border border-line bg-bg px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+        className="w-full resize-none rounded-2xl border border-line bg-bg px-4 py-3 text-sm text-fg outline-none focus:border-accent"
       />
       <p className="mt-2 text-xs text-muted">
         Uvidí tvůj profil a ty dostaneš jeho kontakt.
@@ -155,7 +155,7 @@ export function InterestButton({
         <button
           type="button"
           onClick={() => setOpen(false)}
-         className="flex-1 rounded-2xl border border-line py-3 text-sm font-semibold text-fg"
+          className="flex-1 rounded-2xl border border-line py-3 text-sm font-semibold text-fg"
         >
           Zrušit
         </button>
@@ -163,7 +163,7 @@ export function InterestButton({
           type="button"
           onClick={submit}
           disabled={loading}
-         className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-black disabled:opacity-60"
+          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-black disabled:opacity-60"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Odeslat"}
         </button>

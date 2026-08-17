@@ -77,7 +77,7 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
         </div>
         <Link
           href="/listings/new"
-         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-black transition-transform active:scale-95 lg:hidden"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-black transition-transform active:scale-95 lg:hidden"
           aria-label="Přidat inzerát"
         >
           <Plus className="h-5 w-5" strokeWidth={2.25} />
@@ -128,14 +128,14 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
               isFiltered ? (
                 <Link
                   href="/listings"
-                 className="rounded-2xl border border-line px-5 py-2.5 text-sm font-semibold text-fg"
+                  className="rounded-2xl border border-line px-5 py-2.5 text-sm font-semibold text-fg"
                 >
                   Zrušit filtry
                 </Link>
               ) : (
                 <Link
                   href="/listings/new"
-                 className="rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-sm"
+                  className="rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-sm"
                 >
                   Přidat inzerát
                 </Link>

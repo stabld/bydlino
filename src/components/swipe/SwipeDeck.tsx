@@ -219,14 +219,14 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string | null }) {
                 <div className="flex flex-col items-center gap-2">
                   <Link
                     href="/saved"
-                   className="rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-sm"
+                    className="rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-sm"
                   >
                     Uložené byty
                   </Link>
                   <button
                     type="button"
                     onClick={loadDeck}
-                   className="inline-flex items-center gap-1.5 rounded-2xl border border-line px-5 py-2.5 text-sm font-semibold text-fg"
+                    className="inline-flex items-center gap-1.5 rounded-2xl border border-line px-5 py-2.5 text-sm font-semibold text-fg"
                   >
                     <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
                     Načíst znovu
@@ -252,7 +252,7 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string | null }) {
                 type="button"
                 onClick={undoLast}
                 disabled={busy}
-               className="inline-flex items-center gap-1.5 rounded-tag border border-line px-4 py-2 text-xs font-medium text-muted transition-colors hover:text-fg disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-tag border border-line px-4 py-2 text-xs font-medium text-muted transition-colors hover:text-fg disabled:opacity-50"
               >
                 <Undo2 className="h-3.5 w-3.5" strokeWidth={2} />
                 Zpět
@@ -261,7 +261,7 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string | null }) {
             {current && (
               <Link
                 href={`/listings/${current.id}`}
-               className="inline-flex items-center gap-1.5 rounded-tag border border-line px-4 py-2 text-xs font-medium text-muted transition-colors hover:text-fg lg:hidden"
+                className="inline-flex items-center gap-1.5 rounded-tag border border-line px-4 py-2 text-xs font-medium text-muted transition-colors hover:text-fg lg:hidden"
               >
                 Detail inzerátu
                 <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
@@ -327,7 +327,7 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string | null }) {
 
             <Link
               href={`/listings/${current.id}`}
-             className="mt-6 inline-flex items-center gap-1.5 rounded-2xl border border-line px-5 py-2.5 text-sm font-semibold text-fg transition-colors hover:border-accent/50"
+              className="mt-6 inline-flex items-center gap-1.5 rounded-2xl border border-line px-5 py-2.5 text-sm font-semibold text-fg transition-colors hover:border-accent/50"
             >
               Otevřít inzerát
               <ArrowUpRight className="h-4 w-4" strokeWidth={2} />

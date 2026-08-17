@@ -13,7 +13,7 @@ export default function NotFound() {
       </p>
       <Link
         href="/listings"
-       className="mt-6 rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-black shadow-sm"
+        className="mt-6 rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-black shadow-sm"
       >
         Zpět na nabídky
       </Link>
