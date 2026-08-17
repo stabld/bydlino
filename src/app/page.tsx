@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Search, Users, ShieldCheck, Instagram } from "lucide-react";
+import { ArrowRight, Search, Users, ShieldCheck } from "lucide-react";
 
 export const metadata = {
   title: "Bydlino — najdi pokoj i spolubydlícího v Brně",
@@ -105,13 +105,6 @@ export default function LandingPage() {
         <p className="text-xs text-muted">
           Stěhuješ se nebo potřebuješ něco opravit? Vyřeš to přes Remexo.
         </p>
-        
-          href="https://instagram.com"
-          className="mt-3 inline-flex items-center gap-1.5 text-xs text-muted transition-colors hover:text-fg"
-        >
-          <Instagram className="h-3.5 w-3.5" strokeWidth={1.75} />
-          Sledovat Bydlino
-        </a>
         <p className="mt-4 text-[11px] text-muted/60">© 2026 Bydlino · Brno</p>
       </footer>
     </main>
