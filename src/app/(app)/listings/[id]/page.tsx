@@ -106,11 +106,17 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
     <div className="space-y-5">
       <BackLink href="/listings" label="Zpět na nabídky" />
 
-      <PhotoGallery photos={listing.photos} title={listing.title} />
+      <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-10">
+        <div className="lg:sticky lg:top-10">
+          <PhotoGallery photos={listing.photos} title={listing.title} />
+        </div>
 
+        <div className="mt-5 space-y-5 lg:mt-0">
       <div>
         <div className="flex items-start justify-between gap-3">
-          <h1 className="font-display text-xl font-bold leading-snug text-fg">{listing.title}</h1>
+          <h1 className="font-display text-xl font-bold leading-snug text-fg lg:text-2xl">
+            {listing.title}
+          </h1>
           <span className="price-tag shrink-0 rounded-tag bg-accent py-1.5 pl-5 pr-3 font-mono text-sm font-bold text-black shadow-glow-sm">
             {formatPrice(listing.price)}
           </span>
@@ -252,6 +258,8 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
           </div>
         </>
       )}
+        </div>
+      </div>
     </div>
   );
 }

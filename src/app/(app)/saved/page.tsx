@@ -95,14 +95,14 @@ export default async function SavedPage() {
       <section>
         <div className="mb-3 flex items-center gap-2">
           <Bookmark className="h-4 w-4 text-accent" strokeWidth={2} fill="currentColor" />
-          <h1 className="font-display text-xl font-bold text-fg">Uložené byty</h1>
+          <h1 className="font-display text-xl font-bold text-fg lg:text-2xl">Uložené byty</h1>
           <span className="rounded-tag bg-surface2 px-2 py-0.5 font-mono text-[11px] text-muted">
             {savedListings?.length ?? 0}
           </span>
         </div>
 
         {savedListings && savedListings.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {savedListings.map((listing) => (
               <ListingCard key={listing.id} listing={listing} saved />
             ))}
@@ -199,7 +199,7 @@ export default async function SavedPage() {
         </div>
 
         {myListings && myListings.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {myListings.map((listing) => (
               <ListingCard key={listing.id} listing={listing} />
             ))}

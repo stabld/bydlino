@@ -77,7 +77,7 @@ export default function RegisterPage() {
       <div className="mx-auto w-full max-w-sm">
         <div className="mb-10 text-center">
           <div className="mb-1 flex items-center justify-center gap-1.5">
-            <span className="bg-gradient-primary bg-clip-text font-display text-3xl font-bold tracking-tight text-transparent">
+            <span className="font-display text-3xl font-bold tracking-tight text-accent">
               Bydlino
             </span>
           </div>

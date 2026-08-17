@@ -2,10 +2,20 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { DoorOpen, RotateCcw, Loader2, Undo2, ArrowUpRight } from "lucide-react";
+import {
+  DoorOpen,
+  RotateCcw,
+  Loader2,
+  Undo2,
+  ArrowUpRight,
+  MapPin,
+  CalendarDays,
+} from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/shared/Toast";
 import type { Listing, SwipeDirection } from "@/lib/types";
+import { formatPrice, formatDate } from "@/lib/utils";
+import { Tag } from "@/components/shared/Tag";
 import { ListingSwipeCard, type SwipeSignal } from "./ListingSwipeCard";
 import { ActionButtons } from "./ActionButtons";
 import { EmptyState } from "@/components/shared/EmptyState";
@@ -47,6 +57,20 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
   useEffect(() => {
     loadDeck();
   }, [loadDeck]);
+
+  // Na desktopu se swipuje šipkami; Z vrací poslední rozhodnutí.
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const tag = (e.target as HTMLElement | null)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+      if (e.key === "ArrowRight") triggerSwipe("like");
+      else if (e.key === "ArrowLeft") triggerSwipe("pass");
+      else if (e.key.toLowerCase() === "z") undoLast();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
 
   async function commitSwipe(direction: SwipeDirection) {
     const target = deck?.[0];
@@ -108,8 +132,9 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
   const current = visible[0];
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative aspect-[3/4.3] w-full max-w-sm">
+    <div className="lg:grid lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:items-start lg:gap-10">
+      <div className="flex flex-col items-center">
+        <div className="relative aspect-[3/4.3] w-full max-w-sm">
         {loading ? (
           <div className="flex h-full w-full flex-col items-center justify-center gap-3 rounded-card border border-line bg-surface">
             <Loader2 className="h-5 w-5 animate-spin text-accent" />
@@ -162,7 +187,7 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
         )}
       </div>
 
-      {visible.length > 0 && (
+        {visible.length > 0 && (
         <div className="mt-6 w-full">
           <ActionButtons
             onPass={() => triggerSwipe("pass")}
@@ -185,12 +210,73 @@ export function SwipeDeck({ currentUserId }: { currentUserId: string }) {
             {current && (
               <Link
                 href={`/listings/${current.id}`}
-                className="inline-flex items-center gap-1.5 rounded-tag border border-line px-4 py-2 text-xs font-medium text-muted transition-colors hover:text-fg"
+                className="inline-flex items-center gap-1.5 rounded-tag border border-line px-4 py-2 text-xs font-medium text-muted transition-colors hover:text-fg lg:hidden"
               >
                 Detail inzerátu
                 <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
               </Link>
             )}
+          </div>
+
+          <p className="mt-4 hidden text-center font-mono text-[11px] uppercase tracking-wide text-muted lg:block">
+            ← přeskočit &nbsp;·&nbsp; → uložit &nbsp;·&nbsp; Z zpět
+          </p>
+        </div>
+        )}
+      </div>
+
+      {/* Detailní panel — na širokém displeji je vedle karty místo, tak ho využijeme. */}
+      {current && (
+        <div className="mt-8 hidden lg:mt-0 lg:block">
+          <div className="rounded-card border border-line bg-surface p-6">
+            <div className="flex items-start justify-between gap-4">
+              <h2 className="font-display text-2xl font-bold leading-tight text-fg">
+                {current.title}
+              </h2>
+              <span className="shrink-0 rounded-tag bg-accent px-3 py-1.5 font-mono text-sm font-bold text-black">
+                {formatPrice(current.price)}
+              </span>
+            </div>
+
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
+              <span className="inline-flex items-center gap-1.5">
+                <MapPin className="h-4 w-4" strokeWidth={1.75} />
+                {current.location ? `${current.location}, ` : ""}
+                {current.city}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <DoorOpen className="h-4 w-4" strokeWidth={1.75} />
+                {current.rooms}+1
+              </span>
+              {current.available_from && (
+                <span className="inline-flex items-center gap-1.5">
+                  <CalendarDays className="h-4 w-4" strokeWidth={1.75} />
+                  volné od {formatDate(current.available_from)}
+                </span>
+              )}
+            </div>
+
+            {current.tags.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {current.tags.map((tag) => (
+                  <Tag key={tag}>{tag}</Tag>
+                ))}
+              </div>
+            )}
+
+            {current.description && (
+              <p className="mt-5 whitespace-pre-line text-sm leading-relaxed text-fg/80">
+                {current.description}
+              </p>
+            )}
+
+            <Link
+              href={`/listings/${current.id}`}
+              className="mt-6 inline-flex items-center gap-1.5 rounded-2xl border border-line px-5 py-2.5 text-sm font-semibold text-fg transition-colors hover:border-accent/50"
+            >
+              Otevřít inzerát
+              <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
+            </Link>
           </div>
         </div>
       )}

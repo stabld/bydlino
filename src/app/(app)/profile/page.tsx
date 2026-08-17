@@ -24,11 +24,20 @@ export default async function ProfilePage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="font-display text-2xl font-bold text-fg">Profil</h1>
-        <p className="mt-0.5 text-sm text-muted">Tohle vidí ostatní studenti u tvých swipe karet.</p>
+        <h1 className="font-display text-2xl font-bold text-fg lg:text-3xl">Profil</h1>
+        <p className="mt-0.5 text-sm text-muted">
+          Tohle uvidí inzerent, když se mu ozveš.
+        </p>
       </div>
-      <ProfileCompleteness profile={profile} contacts={contacts} />
-      <ProfileForm profile={profile} contacts={contacts} />
+
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start lg:gap-8">
+        <div className="lg:order-1">
+          <ProfileForm profile={profile} contacts={contacts} />
+        </div>
+        <div className="mb-5 lg:order-2 lg:mb-0 lg:sticky lg:top-10">
+          <ProfileCompleteness profile={profile} contacts={contacts} />
+        </div>
+      </div>
     </div>
   );
 }

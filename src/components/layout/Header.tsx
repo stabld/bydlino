@@ -6,7 +6,7 @@ export function Header() {
     <header className="sticky top-0 z-20 border-b border-line bg-bg/80 backdrop-blur-md supports-[backdrop-filter]:bg-bg/60">
       <div className="mx-auto flex max-w-md items-center justify-between px-5 py-3.5">
         <Link href="/listings" className="flex items-center gap-1.5">
-          <span className="bg-gradient-primary bg-clip-text font-display text-lg font-bold tracking-tight text-transparent">
+          <span className="font-display text-lg font-bold tracking-tight text-accent">
             Bydlino
           </span>
         </Link>

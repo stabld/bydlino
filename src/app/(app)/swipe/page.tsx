@@ -13,9 +13,9 @@ export default async function SwipePage() {
   if (!user) return null;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 lg:space-y-8">
       <div>
-        <h1 className="font-display text-2xl font-bold text-fg">Procházet byty</h1>
+        <h1 className="font-display text-2xl font-bold text-fg lg:text-3xl">Procházet byty</h1>
         <p className="mt-0.5 text-sm text-muted">
           Doprava uložíš, doleva přeskočíš.
         </p>

@@ -73,7 +73,7 @@ export function ListingFilters({ values }: { values: ListingFilterValues }) {
 
       {open && (
         <div className="space-y-2 rounded-card border border-line bg-surface p-3.5">
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2 lg:grid-cols-6">
             <input
               name="city"
               type="text"
@@ -122,7 +122,7 @@ export function ListingFilters({ values }: { values: ListingFilterValues }) {
 
           <button
             type="submit"
-            className="mt-1 w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98]"
+            className="mt-1 w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98] lg:w-auto lg:px-8"
           >
             Použít filtry
           </button>

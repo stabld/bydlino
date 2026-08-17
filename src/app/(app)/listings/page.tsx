@@ -69,7 +69,7 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
     <div className="space-y-5">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-fg">Hledat pokoj</h1>
+          <h1 className="font-display text-2xl font-bold text-fg lg:text-3xl">Nabídky</h1>
           <p className="mt-0.5 text-sm text-muted">
             {count} {count === 1 ? "nabídka" : count >= 2 && count <= 4 ? "nabídky" : "nabídek"}
             {isFiltered ? " odpovídá filtrům" : " v Brně"}
@@ -77,7 +77,7 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
         </div>
         <Link
           href="/listings/new"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-black shadow-glow-sm transition-transform active:scale-95"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-black shadow-glow-sm transition-transform active:scale-95 lg:hidden"
           aria-label="Přidat inzerát"
         >
           <Plus className="h-5 w-5" strokeWidth={2.25} />
@@ -88,7 +88,7 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
 
       {listings && listings.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {listings.slice(0, 4).map((listing) => (
               <ListingCard key={listing.id} listing={listing} saved={savedIds.has(listing.id)} />
             ))}
@@ -97,7 +97,7 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
           <RemexoBanner />
 
           {listings.length > 4 && (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {listings.slice(4).map((listing) => (
                 <ListingCard key={listing.id} listing={listing} saved={savedIds.has(listing.id)} />
               ))}
