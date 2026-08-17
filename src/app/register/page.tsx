@@ -28,8 +28,8 @@ export default function RegisterPage() {
       options: {
         data: { name },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
+ },
+ });
 
     if (error) {
       setError(
@@ -39,17 +39,17 @@ export default function RegisterPage() {
       );
       setLoading(false);
       return;
-    }
+ }
 
     if (data.session) {
       router.push("/profile");
       router.refresh();
       return;
-    }
+ }
 
     setNeedsConfirmation(true);
     setLoading(false);
-  }
+ }
 
   if (needsConfirmation) {
     return (
@@ -64,13 +64,13 @@ export default function RegisterPage() {
         </p>
         <Link
           href="/login"
-          className="mt-6 rounded-2xl bg-gradient-primary px-6 py-3 text-sm font-semibold text-black shadow-glow-sm"
+         className="mt-6 rounded-2xl bg-gradient-primary px-6 py-3 text-sm font-semibold text-black"
         >
           Zpět na přihlášení
         </Link>
       </div>
     );
-  }
+ }
 
   return (
     <div className="flex min-h-dvh flex-col justify-center px-6 py-12">
@@ -97,7 +97,7 @@ export default function RegisterPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Jana Nováková"
-              className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
+             className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
             />
           </div>
           <div>
@@ -112,7 +112,7 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="jana@vut.cz"
-              className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
+             className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
             />
           </div>
           <div>
@@ -128,7 +128,7 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="alespoň 6 znaků"
-              className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
+             className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
             />
           </div>
 
@@ -137,7 +137,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
+           className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98] disabled:opacity-60"
           >
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

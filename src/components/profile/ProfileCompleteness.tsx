@@ -30,7 +30,7 @@ export function ProfileCompleteness({
       <div className="rounded-card border border-accent/40 bg-accent-soft px-4 py-3">
         <p className="text-sm font-semibold text-accent">Profil je kompletní</p>
         <p className="mt-0.5 text-xs text-muted">
-          Inzerenti uvidí, kdo jim píše — to výrazně zvyšuje šanci na odpověď.
+          Majitel vidí, komu odpovídá. To se počítá.
         </p>
       </div>
     );
@@ -39,8 +39,8 @@ export function ProfileCompleteness({
   return (
     <div className="rounded-card border border-line bg-surface p-4">
       <div className="flex items-baseline justify-between">
-        <p className="text-sm font-semibold text-fg">Profil vyplněn na {pct} %</p>
-        <span className="font-mono text-xs text-muted">
+        <p className="text-sm font-semibold text-fg">Profil máš z {pct} % hotový</p>
+        <span className="text-xs text-muted">
           {done}/{checks.length}
         </span>
       </div>

@@ -28,7 +28,7 @@ export function ListingFilters({ values }: { values: ListingFilterValues }) {
     <form action="/listings" method="get" className="space-y-2">
       <div className="relative">
         <Search
-          className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
+         className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
           strokeWidth={1.75}
         />
         <input
@@ -36,7 +36,7 @@ export function ListingFilters({ values }: { values: ListingFilterValues }) {
           type="search"
           defaultValue={values.q}
           placeholder="Hledat pokoj, čtvrť, tag..."
-          className="w-full rounded-2xl border border-line bg-surface py-3 pl-11 pr-4 text-sm text-fg outline-none transition-colors focus:border-accent"
+         className="w-full rounded-2xl border border-line bg-surface py-3 pl-11 pr-4 text-sm text-fg outline-none transition-colors focus:border-accent"
         />
       </div>
 
@@ -44,8 +44,8 @@ export function ListingFilters({ values }: { values: ListingFilterValues }) {
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
-          className={cn(
-            "inline-flex items-center gap-1.5 rounded-tag border px-3 py-1.5 text-xs font-medium transition-colors",
+         className={cn(
+ "inline-flex items-center gap-1.5 rounded-tag border px-3 py-1.5 text-xs font-medium transition-colors",
             open || activeCount > 0
               ? "border-accent/50 bg-accent-soft text-accent"
               : "border-line text-muted"
@@ -63,7 +63,7 @@ export function ListingFilters({ values }: { values: ListingFilterValues }) {
         {(activeCount > 0 || values.q) && (
           <a
             href="/listings"
-            className="inline-flex items-center gap-1 rounded-tag border border-line px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:text-fg"
+           className="inline-flex items-center gap-1 rounded-tag border border-line px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:text-fg"
           >
             <X className="h-3 w-3" strokeWidth={2} />
             Zrušit
@@ -79,7 +79,7 @@ export function ListingFilters({ values }: { values: ListingFilterValues }) {
               type="text"
               defaultValue={values.city}
               placeholder="Čtvrť"
-              className="w-full rounded-xl border border-line bg-bg px-3 py-2.5 text-sm text-fg outline-none focus:border-accent"
+             className="w-full rounded-xl border border-line bg-bg px-3 py-2.5 text-sm text-fg outline-none focus:border-accent"
             />
             <input
               name="maxPrice"
@@ -88,12 +88,12 @@ export function ListingFilters({ values }: { values: ListingFilterValues }) {
               min={0}
               defaultValue={values.maxPrice}
               placeholder="Max. Kč"
-              className="w-full rounded-xl border border-line bg-bg px-3 py-2.5 text-sm text-fg outline-none focus:border-accent"
+             className="w-full rounded-xl border border-line bg-bg px-3 py-2.5 text-sm text-fg outline-none focus:border-accent"
             />
             <select
               name="rooms"
               defaultValue={values.rooms || ""}
-              className="w-full rounded-xl border border-line bg-bg px-2.5 py-2.5 text-sm text-fg outline-none focus:border-accent"
+             className="w-full rounded-xl border border-line bg-bg px-2.5 py-2.5 text-sm text-fg outline-none focus:border-accent"
             >
               <option value="">Pokoje</option>
               <option value="1">1+</option>
@@ -111,7 +111,7 @@ export function ListingFilters({ values }: { values: ListingFilterValues }) {
                   name="sort"
                   value={s.value}
                   defaultChecked={(values.sort || "new") === s.value}
-                  className="peer sr-only"
+                 className="peer sr-only"
                 />
                 <span className="inline-block rounded-tag border border-line px-3 py-1.5 text-xs font-medium text-muted transition-colors peer-checked:border-accent/50 peer-checked:bg-accent-soft peer-checked:text-accent">
                   {s.label}
@@ -122,7 +122,7 @@ export function ListingFilters({ values }: { values: ListingFilterValues }) {
 
           <button
             type="submit"
-            className="mt-1 w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98] lg:w-auto lg:px-8"
+           className="mt-1 w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-black transition-transform active:scale-[0.98] lg:w-auto lg:px-8"
           >
             Použít filtry
           </button>

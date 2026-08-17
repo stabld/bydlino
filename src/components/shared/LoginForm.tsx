@@ -32,11 +32,11 @@ export function LoginForm() {
       );
       setLoading(false);
       return;
-    }
+ }
 
     router.push(next);
     router.refresh();
-  }
+ }
 
   return (
     <div className="flex min-h-dvh flex-col justify-center px-6 py-12">
@@ -47,7 +47,7 @@ export function LoginForm() {
               Bydlino
             </span>
           </div>
-          <p className="text-sm text-muted">Pokoje a spolubydlící pro studenty v Brně</p>
+          <p className="text-sm text-muted">Pokoje a byty pro studenty v Brně</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-3.5">
@@ -63,7 +63,7 @@ export function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="jana@vut.cz"
-              className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
+             className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
             />
           </div>
           <div>
@@ -78,7 +78,7 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
+             className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none transition-colors focus:border-accent"
             />
           </div>
 
@@ -87,7 +87,7 @@ export function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
+           className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98] disabled:opacity-60"
           >
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

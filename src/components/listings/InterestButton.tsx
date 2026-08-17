@@ -33,25 +33,25 @@ export function InterestButton({
     const supabase = createClient();
     const {
       data: { user },
-    } = await supabase.auth.getUser();
+ } = await supabase.auth.getUser();
 
     if (!user) {
       toast("Musíš být přihlášený/á.", "error");
       setLoading(false);
       return;
-    }
+ }
 
     const { error } = await supabase.from("listing_interests").insert({
       listing_id: listingId,
       user_id: user.id,
       message: message.trim() || null,
-    });
+ });
 
     if (error) {
       toast("Nepovedlo se odeslat zájem.", "error");
       setLoading(false);
       return;
-    }
+ }
 
     // Kontakt se odemyká až po zápisu zájmu (řídí to RLS politika na serveru).
     const { data: listing } = await supabase
@@ -67,14 +67,14 @@ export function InterestButton({
         .eq("user_id", listing.owner_id)
         .maybeSingle<ProfileContacts>();
       setContacts(unlocked ?? null);
-    }
+ }
 
     setInterested(true);
     setOpen(false);
     setLoading(false);
     toast("Zájem odeslán — kontakt je odemčený");
     router.refresh();
-  }
+ }
 
   if (interested) {
     return (
@@ -105,7 +105,7 @@ export function InterestButton({
               {contacts?.phone && (
                 <a
                   href={`tel:${contacts.phone.replace(/\s/g, "")}`}
-                  className="inline-flex items-center gap-1.5 rounded-tag border border-line bg-surface px-3 py-1.5 text-xs font-medium text-fg"
+                 className="inline-flex items-center gap-1.5 rounded-tag border border-line bg-surface px-3 py-1.5 text-xs font-medium text-fg"
                 >
                   <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
                   {contacts.phone}
@@ -115,25 +115,25 @@ export function InterestButton({
           </>
         ) : (
           <p className="mt-2 text-sm text-muted">
-            {ownerName} zatím nemá vyplněný kontakt. Uvidí tě mezi zájemci a může se ozvat.
+            {ownerName} zatím nemá vyplněný kontakt. Uvidí tě mezi zájemci a ozve se sám.
           </p>
         )}
       </div>
     );
-  }
+ }
 
   if (!open) {
     return (
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98]"
+       className="flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-black shadow-sm transition-transform active:scale-[0.98]"
       >
         <Send className="h-4 w-4" strokeWidth={2} />
         Mám zájem
       </button>
     );
-  }
+ }
 
   return (
     <div className="rounded-card border border-line bg-surface p-4">
@@ -145,17 +145,17 @@ export function InterestButton({
         rows={3}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Ahoj, studuju na FI MUNI a hledám pokoj od září..."
-        className="w-full resize-none rounded-2xl border border-line bg-bg px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+        placeholder="Ahoj, je ten pokoj ještě volný? Studuju na FI a hledám od září…"
+       className="w-full resize-none rounded-2xl border border-line bg-bg px-4 py-3 text-sm text-fg outline-none focus:border-accent"
       />
       <p className="mt-2 text-xs text-muted">
-        Po odeslání se ti odemkne kontakt na inzerenta a on uvidí tvůj profil.
+        Uvidí tvůj profil a ty dostaneš jeho kontakt.
       </p>
       <div className="mt-3 flex gap-2">
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="flex-1 rounded-2xl border border-line py-3 text-sm font-semibold text-fg"
+         className="flex-1 rounded-2xl border border-line py-3 text-sm font-semibold text-fg"
         >
           Zrušit
         </button>
@@ -163,7 +163,7 @@ export function InterestButton({
           type="button"
           onClick={submit}
           disabled={loading}
-          className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-black disabled:opacity-60"
+         className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-black disabled:opacity-60"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Odeslat"}
         </button>

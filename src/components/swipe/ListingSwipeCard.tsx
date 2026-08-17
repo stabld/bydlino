@@ -65,7 +65,7 @@ export function ListingSwipeCard({
 
   return (
     <motion.div
-      className="absolute inset-0 overflow-hidden rounded-card border border-line bg-surface shadow-card"
+      className="absolute inset-0 overflow-hidden rounded-card bg-surface shadow-card"
       style={active ? { x, rotate } : undefined}
       initial={false}
       animate={active ? { scale: 1, y: 0 } : stackStyle}
@@ -91,11 +91,11 @@ export function ListingSwipeCard({
           </div>
         )}
 
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/92 via-black/25 to-black/10" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/92 via-black/25 to-black/10 lg:from-black/45 lg:via-transparent lg:to-transparent" />
 
         {/* Cena je to první, co u bytu člověk řeší — proto nahoře a velká. */}
         <div className="pointer-events-none absolute left-4 top-4">
-          <span className="rounded-tag bg-accent px-3.5 py-2 font-mono text-base font-bold text-black shadow-glow-sm">
+          <span className="rounded-tag bg-accent px-3.5 py-2 text-base font-bold text-black lg:bg-black/70 lg:text-white lg:backdrop-blur-sm">
             {formatPrice(listing.price)}
           </span>
         </div>
@@ -104,20 +104,20 @@ export function ListingSwipeCard({
           <>
             <motion.div
               style={{ opacity: likeOpacity }}
-              className="pointer-events-none absolute right-5 top-16 rotate-[-12deg] rounded-lg border-[3px] border-accent px-3 py-1 font-mono text-sm font-bold uppercase tracking-wide text-accent shadow-glow"
+              className="pointer-events-none absolute right-5 top-16 rotate-[-12deg] rounded-lg border-[3px] border-accent px-3 py-1 text-sm font-bold uppercase text-accent"
             >
               Uložit
             </motion.div>
             <motion.div
               style={{ opacity: passOpacity }}
-              className="pointer-events-none absolute left-5 top-16 rotate-[12deg] rounded-lg border-[3px] border-white/70 px-3 py-1 font-mono text-sm font-bold uppercase tracking-wide text-white/90"
+              className="pointer-events-none absolute left-5 top-16 rotate-[12deg] rounded-lg border-[3px] border-white/70 px-3 py-1 text-sm font-bold uppercase text-white/90"
             >
               Přeskočit
             </motion.div>
           </>
         )}
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-5 text-white">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-5 text-white lg:hidden">
           <h3 className="font-display text-xl font-bold leading-tight">{listing.title}</h3>
 
           <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/80">

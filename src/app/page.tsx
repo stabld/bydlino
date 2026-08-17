@@ -2,25 +2,25 @@ import Link from "next/link";
 import { ArrowRight, Flame, Bookmark, ShieldCheck } from "lucide-react";
 
 export const metadata = {
-  title: "Bydlino — najdi pokoj i spolubydlícího v Brně",
+  title: "Bydlino — pokoje a byty pro studenty v Brně",
 };
 
 const STEPS = [
   {
     icon: Flame,
     title: "Swipuj byty",
-    text: "Doprava uložíš, doleva přeskočíš. Rychlejší než scrollovat inzertní weby.",
-  },
+    text: "Projedeš deset bytů rychleji, než na Bazoši otevřeš jeden inzerát.",
+ },
   {
     icon: Bookmark,
     title: "Uložené na jednom místě",
-    text: "Všechny byty, co se ti líbily, najdeš pohromadě i s cenou a termínem.",
-  },
+    text: "Nemusíš si nic psát do poznámek. Co jsi uložil, máš pohromadě.",
+ },
   {
     icon: ShieldCheck,
     title: "Domluvte se napřímo",
-    text: "Klikneš Mám zájem, odemkne se kontakt na inzerenta. Žádná provize.",
-  },
+    text: "Napíšeš majiteli, dostaneš kontakt. Žádná realitka, žádná provize.",
+ },
 ];
 
 export default function LandingPage() {
@@ -37,9 +37,9 @@ export default function LandingPage() {
 
       <section className="pt-14 lg:grid lg:grid-cols-2 lg:items-center lg:gap-16 lg:pt-24">
         <div>
-        <span className="inline-flex items-center gap-2 rounded-tag border border-line bg-surface px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide text-muted">
+        <span className="inline-flex items-center gap-2 rounded-tag border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-          Brno · Zima 2026
+          Zatím jen Brno
         </span>
 
         <h1 className="mt-5 font-display text-[2.6rem] font-bold leading-[1.05] text-fg lg:text-[3.5rem]">
@@ -49,21 +49,21 @@ export default function LandingPage() {
         </h1>
 
         <p className="mt-4 text-[15px] leading-relaxed text-muted lg:text-base">
-          Studentské pokoje a byty v Brně. Swipuješ jako na Tinderu — co se ti líbí, uložíš,
-          a s inzerentem se domluvíš napřímo.
+          Pokoje a byty pro studenty v Brně. Projedeš nabídku za pět minut, co tě zaujme si
+          uložíš a majiteli napíšeš napřímo.
         </p>
 
         <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
           <Link
             href="/register"
-            className="flex items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98]"
+           className="flex items-center justify-center gap-2 rounded-2xl bg-accent py-3.5 text-sm font-semibold text-black shadow-sm transition-transform active:scale-[0.98]"
           >
-            Založit účet zdarma
+            Založit účet
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             href="/login"
-            className="flex items-center justify-center rounded-2xl border border-line py-3.5 text-sm font-semibold text-fg transition-colors hover:border-accent/50"
+           className="flex items-center justify-center rounded-2xl border border-line py-3.5 text-sm font-semibold text-fg transition-colors hover:border-accent/50"
           >
             Už mám účet
           </Link>
@@ -74,7 +74,7 @@ export default function LandingPage() {
         <div className="mt-14 hidden lg:mt-0 lg:block">
           <div className="relative mx-auto aspect-[3/4] w-full max-w-[320px] overflow-hidden rounded-card border border-line bg-surface shadow-card">
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-            <div className="absolute left-4 top-4 rounded-tag bg-accent px-3.5 py-2 font-mono text-base font-bold text-black">
+            <div className="absolute left-4 top-4 rounded-tag bg-black/70 px-3.5 py-2 text-base font-bold text-white backdrop-blur-sm">
               7 500 Kč/měs
             </div>
             <div className="absolute inset-x-0 bottom-0 p-5 text-white">
@@ -86,7 +86,7 @@ export default function LandingPage() {
                 {["balkón", "po rekonstrukci", "MHD 3 min"].map((t) => (
                   <span
                     key={t}
-                    className="rounded-tag bg-white/15 px-2.5 py-0.5 text-[11px] font-medium backdrop-blur-sm"
+                   className="rounded-tag bg-white/15 px-2.5 py-0.5 text-[11px] font-medium backdrop-blur-sm"
                   >
                     {t}
                   </span>
@@ -94,9 +94,7 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-          <p className="mt-4 text-center font-mono text-[11px] uppercase tracking-wide text-muted">
-            ← přeskočit &nbsp;·&nbsp; → uložit
-          </p>
+          <p className="mt-4 text-center text-xs text-muted">Doleva přeskočíš, doprava uložíš.</p>
         </div>
       </section>
 
@@ -109,7 +107,7 @@ export default function LandingPage() {
               </div>
               <div>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-[11px] text-muted">0{i + 1}</span>
+                  <span className="text-xs font-semibold text-accent">{i + 1}</span>
                   <h2 className="font-display text-base font-semibold text-fg">{title}</h2>
                 </div>
                 <p className="mt-1 text-sm leading-relaxed text-muted">{text}</p>
@@ -122,21 +120,21 @@ export default function LandingPage() {
       <section className="mt-14 rounded-card border border-line bg-surface p-6 text-center lg:mt-20 lg:p-12">
         <h2 className="font-display text-lg font-semibold text-fg lg:text-2xl">Startujeme v Brně</h2>
         <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-muted">
-          Bydlino je čerstvý projekt. Přidáváme nové inzeráty průběžně — a pokud sám
-          pronajímáš, můžeš svůj přidat hned.
+          Začínáme, takže inzerátů zatím není sto. Když pronajímáš pokoj, přidej ho —
+          zabere to dvě minuty.
         </p>
         <Link
           href="/register"
-          className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-black shadow-glow-sm"
+         className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-black shadow-sm"
         >
-          Chci se přidat
+          Založit účet
           <ArrowRight className="h-4 w-4" />
         </Link>
       </section>
 
       <footer className="mt-14 border-t border-line pt-6 text-center">
         <p className="text-xs text-muted">
-          Stěhuješ se nebo potřebuješ něco opravit? Vyřeš to přes Remexo.
+          Na drobné opravy a stěhování chystáme propojení s Remexem.
         </p>
         <p className="mt-4 text-[11px] text-muted/60">© 2026 Bydlino · Brno</p>
       </footer>

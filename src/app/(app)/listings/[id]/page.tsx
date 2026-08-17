@@ -117,7 +117,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
           <h1 className="font-display text-xl font-bold leading-snug text-fg lg:text-2xl">
             {listing.title}
           </h1>
-          <span className="price-tag shrink-0 rounded-tag bg-accent py-1.5 pl-5 pr-3 font-mono text-sm font-bold text-black shadow-glow-sm">
+          <span className="shrink-0 rounded-tag bg-accent px-3.5 py-1.5 text-sm font-bold text-black">
             {formatPrice(listing.price)}
           </span>
         </div>
@@ -236,7 +236,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
                     )}
 
                     {(contacts?.instagram || contacts?.facebook) && (
-                      <p className="mt-2 font-mono text-xs text-accent">
+                      <p className="mt-2 text-xs font-medium text-accent">
                         {[contacts?.instagram, contacts?.facebook, contacts?.phone].filter(Boolean).join("  ·  ")}
                       </p>
                     )}

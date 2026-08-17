@@ -22,27 +22,27 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+ } = await supabase.auth.getUser();
 
   let query = supabase.from("listings").select("*");
 
   if (searchParams.q) {
     const term = `%${searchParams.q}%`;
     query = query.or(`title.ilike.${term},description.ilike.${term},location.ilike.${term}`);
-  }
+ }
   if (searchParams.city) {
     query = query.or(
       `city.ilike.%${searchParams.city}%,location.ilike.%${searchParams.city}%`
     );
-  }
+ }
   if (searchParams.maxPrice) {
     const maxPrice = Number(searchParams.maxPrice);
     if (!Number.isNaN(maxPrice)) query = query.lte("price", maxPrice);
-  }
+ }
   if (searchParams.rooms) {
     const rooms = Number(searchParams.rooms);
     if (!Number.isNaN(rooms)) query = query.gte("rooms", rooms);
-  }
+ }
 
   if (searchParams.sort === "price_asc") query = query.order("price", { ascending: true });
   else if (searchParams.sort === "price_desc") query = query.order("price", { ascending: false });
@@ -77,7 +77,7 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
         </div>
         <Link
           href="/listings/new"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-black shadow-glow-sm transition-transform active:scale-95 lg:hidden"
+         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-black transition-transform active:scale-95 lg:hidden"
           aria-label="Přidat inzerát"
         >
           <Plus className="h-5 w-5" strokeWidth={2.25} />
@@ -113,24 +113,24 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
               isFiltered
                 ? "Zkus hledat volněji, nebo filtry zruš."
                 : "Buď první — přidej inzerát a ostatní studenti ho uvidí."
-            }
+ }
             action={
               isFiltered ? (
                 <Link
                   href="/listings"
-                  className="rounded-2xl border border-line px-5 py-2.5 text-sm font-semibold text-fg"
+                 className="rounded-2xl border border-line px-5 py-2.5 text-sm font-semibold text-fg"
                 >
                   Zrušit filtry
                 </Link>
               ) : (
                 <Link
                   href="/listings/new"
-                  className="rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-glow-sm"
+                 className="rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-sm"
                 >
                   Přidat inzerát
                 </Link>
               )
-            }
+ }
           />
           <RemexoBanner />
         </>

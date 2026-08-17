@@ -14,7 +14,7 @@ export function ListingCard({ listing, saved = false }: { listing: Listing; save
       href={`/listings/${listing.id}`}
       className="group block overflow-hidden rounded-card border border-line bg-surface shadow-card transition-all hover:border-accent/40 active:scale-[0.99]"
     >
-      <div className="relative aspect-[4/3] w-full bg-surface2">
+      <div className="relative aspect-[5/4] w-full bg-surface2">
         {cover ? (
           <Image
             src={cover}
@@ -29,17 +29,14 @@ export function ListingCard({ listing, saved = false }: { listing: Listing; save
           </div>
         )}
 
-        <div className="price-tag absolute left-3 top-3 rounded-tag bg-accent py-1.5 pl-5 pr-3 font-mono text-xs font-bold text-black shadow-glow-sm">
-          {formatPrice(listing.price)}
-        </div>
-
         <div className="absolute right-3 top-3">
           <SaveButton listingId={listing.id} initiallySaved={saved} />
         </div>
       </div>
 
       <div className="p-4">
-        <h3 className="font-display text-[15px] font-semibold leading-snug text-fg">
+        <p className="text-lg font-bold text-accent">{formatPrice(listing.price)}</p>
+        <h3 className="mt-0.5 font-display text-[15px] font-semibold leading-snug text-fg">
           {listing.title}
         </h3>
 

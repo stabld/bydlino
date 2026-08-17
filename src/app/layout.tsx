@@ -21,9 +21,9 @@ const mono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Bydlino — bydlení a spolubydlící pro studenty v Brně",
+  title: "Bydlino — pokoje a byty pro studenty v Brně",
   description:
-    "Bydlino pomáhá studentům v Brně najít pokoj k pronájmu a vhodného spolubydlícího. Rychlé, moderní MVP.",
+    "Pokoje a byty pro studenty v Brně. Projedeš nabídku za pár minut a s majitelem se domluvíš napřímo.",
 };
 
 export const viewport: Viewport = {

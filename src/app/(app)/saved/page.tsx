@@ -14,7 +14,7 @@ export default async function SavedPage() {
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+ } = await supabase.auth.getUser();
 
   if (!user) return null;
 
@@ -77,8 +77,8 @@ export default async function SavedPage() {
         listing,
         owner: ownerById.get(listing.owner_id) ?? null,
         contacts: contactByOwner.get(listing.owner_id) ?? null,
-      };
-    })
+ };
+ })
     .filter(
       (
         x
@@ -87,7 +87,7 @@ export default async function SavedPage() {
         listing: Listing;
         owner: Profile | null;
         contacts: ProfileContacts | null;
-      } => Boolean(x)
+ } => Boolean(x)
     );
 
   return (
@@ -96,7 +96,7 @@ export default async function SavedPage() {
         <div className="mb-3 flex items-center gap-2">
           <Bookmark className="h-4 w-4 text-accent" strokeWidth={2} fill="currentColor" />
           <h1 className="font-display text-xl font-bold text-fg lg:text-2xl">Uložené byty</h1>
-          <span className="rounded-tag bg-surface2 px-2 py-0.5 font-mono text-[11px] text-muted">
+          <span className="text-sm font-normal text-muted">
             {savedListings?.length ?? 0}
           </span>
         </div>
@@ -111,15 +111,15 @@ export default async function SavedPage() {
           <EmptyState
             icon={Bookmark}
             title="Zatím nic uloženého"
-            description="Projdi nabídky a swipni doprava ty, které se ti líbí."
+            description="Projeď nabídku a hoď doprava, co tě zaujme."
             action={
               <Link
                 href="/swipe"
-                className="rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-glow-sm"
+               className="rounded-2xl bg-accent px-5 py-2.5 text-sm font-semibold text-black shadow-sm"
               >
                 Procházet byty
               </Link>
-            }
+ }
           />
         )}
       </section>
@@ -128,7 +128,7 @@ export default async function SavedPage() {
         <div className="mb-3 flex items-center gap-2">
           <Send className="h-4 w-4 text-accent" strokeWidth={2} />
           <h2 className="font-display text-lg font-bold text-fg">Kde jsem se ozval/a</h2>
-          <span className="rounded-tag bg-surface2 px-2 py-0.5 font-mono text-[11px] text-muted">
+          <span className="text-sm font-normal text-muted">
             {contacted.length}
           </span>
         </div>
@@ -139,7 +139,7 @@ export default async function SavedPage() {
               <Link
                 key={interest.id}
                 href={`/listings/${listing.id}`}
-                className="block rounded-card border border-line bg-surface p-4 transition-colors hover:border-accent/40"
+               className="block rounded-card border border-line bg-surface p-4 transition-colors hover:border-accent/40"
               >
                 <div className="flex items-center gap-3">
                   <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-surface2">
@@ -184,7 +184,7 @@ export default async function SavedPage() {
           </div>
         ) : (
           <p className="rounded-card border border-dashed border-line px-4 py-6 text-center text-sm text-muted">
-            Zatím ses nikomu neozval/a. U inzerátu klikni na „Mám zájem“ a odemkne se ti kontakt.
+            Zatím jsi nikomu nenapsal. U inzerátu klikni na „Mám zájem“ a dostaneš kontakt.
           </p>
         )}
       </section>
@@ -193,7 +193,7 @@ export default async function SavedPage() {
         <div className="mb-3 flex items-center gap-2">
           <FileText className="h-4 w-4 text-accent" strokeWidth={2} />
           <h2 className="font-display text-lg font-bold text-fg">Moje inzeráty</h2>
-          <span className="rounded-tag bg-surface2 px-2 py-0.5 font-mono text-[11px] text-muted">
+          <span className="text-sm font-normal text-muted">
             {myListings?.length ?? 0}
           </span>
         </div>
@@ -206,7 +206,7 @@ export default async function SavedPage() {
           </div>
         ) : (
           <p className="rounded-card border border-dashed border-line px-4 py-6 text-center text-sm text-muted">
-            Nemáš žádný inzerát. Pronajímáš pokoj? Přidej ho na stránce Nabídky.
+            Pronajímáš pokoj? Přidej inzerát, zabere to dvě minuty.
           </p>
         )}
       </section>

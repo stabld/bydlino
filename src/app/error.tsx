@@ -12,7 +12,7 @@ export default function GlobalError({
 }) {
   useEffect(() => {
     console.error(error);
-  }, [error]);
+ }, [error]);
 
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center px-6 text-center">
@@ -31,7 +31,7 @@ export default function GlobalError({
       <button
         type="button"
         onClick={reset}
-        className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-black shadow-glow-sm"
+       className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-accent px-6 py-3 text-sm font-semibold text-black shadow-sm"
       >
         <RotateCcw className="h-4 w-4" strokeWidth={2} />
         Zkusit znovu

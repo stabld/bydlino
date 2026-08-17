@@ -30,8 +30,8 @@ export function Sidebar() {
               key={href}
               href={href}
               aria-current={active ? "page" : undefined}
-              className={cn(
-                "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition-colors",
+             className={cn(
+ "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition-colors",
                 active
                   ? "bg-accent-soft text-accent"
                   : "text-muted hover:bg-fg/5 hover:text-fg"
@@ -41,12 +41,12 @@ export function Sidebar() {
               {label}
             </Link>
           );
-        })}
+ })}
       </nav>
 
       <Link
         href="/listings/new"
-        className="mt-6 flex items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98]"
+       className="mt-6 flex items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-black transition-transform active:scale-[0.98]"
       >
         <Plus className="h-4 w-4" strokeWidth={2.25} />
         Přidat inzerát
@@ -58,15 +58,13 @@ export function Sidebar() {
           <p className="mt-1 text-xs leading-relaxed text-muted">
             Řemeslníka na drobné opravy vyřešíš přes Remexo.
           </p>
-          <span className="mt-2 inline-block font-mono text-[10px] uppercase tracking-wide text-accent">
-            brzy tady
-          </span>
+          <span className="mt-2 inline-block text-xs font-medium text-accent">připravujeme</span>
         </div>
 
         <form action="/auth/signout" method="post">
           <button
             type="submit"
-            className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-fg/5 hover:text-fg"
+           className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-fg/5 hover:text-fg"
           >
             <LogOut className="h-[18px] w-[18px]" strokeWidth={1.9} />
             Odhlásit se

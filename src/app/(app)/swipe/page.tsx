@@ -17,7 +17,7 @@ export default async function SwipePage() {
       <div>
         <h1 className="font-display text-2xl font-bold text-fg lg:text-3xl">Procházet byty</h1>
         <p className="mt-0.5 text-sm text-muted">
-          Doprava uložíš, doleva přeskočíš.
+          Co se ti líbí, hoď doprava. Zbytek doleva.
         </p>
       </div>
 

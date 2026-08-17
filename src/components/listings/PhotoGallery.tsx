@@ -17,7 +17,7 @@ export function PhotoGallery({ photos, title }: { photos: string[]; title: strin
 
   if (photos.length === 0) {
     return (
-      <div className="flex aspect-[4/3] w-full items-center justify-center rounded-card border border-line bg-surface">
+      <div className="flex aspect-[5/4] w-full items-center justify-center rounded-card border border-line bg-surface">
         <DoorOpen className="h-8 w-8 text-muted" strokeWidth={1.5} />
       </div>
     );
@@ -31,7 +31,7 @@ export function PhotoGallery({ photos, title }: { photos: string[]; title: strin
         className="flex snap-x snap-mandatory overflow-x-auto"
       >
         {photos.map((photo) => (
-          <div key={photo} className="relative aspect-[4/3] w-full shrink-0 snap-center bg-surface2">
+          <div key={photo} className="relative aspect-[5/4] w-full shrink-0 snap-center bg-surface2">
             <Image src={photo} alt={title} fill sizes="480px" className="object-cover" />
           </div>
         ))}

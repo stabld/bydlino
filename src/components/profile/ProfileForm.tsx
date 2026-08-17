@@ -42,7 +42,7 @@ export function ProfileForm({
     if (!file) return;
     setPhotoFile(file);
     setPhotoPreview(URL.createObjectURL(file));
-  }
+ }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -60,7 +60,7 @@ export function ProfileForm({
         if (uploadError) throw uploadError;
         const { data: publicUrl } = supabase.storage.from("avatars").getPublicUrl(path);
         nextPhotoUrl = publicUrl.publicUrl;
-      }
+ }
 
       const { error: profileError } = await supabase
         .from("profiles")
@@ -73,7 +73,7 @@ export function ProfileForm({
           preferred_location: preferredLocation.trim() || null,
           max_budget: maxBudget ? Number(maxBudget) : null,
           photo_url: nextPhotoUrl,
-        })
+ })
         .eq("id", profile.id);
       if (profileError) throw profileError;
 
@@ -83,7 +83,7 @@ export function ProfileForm({
           instagram: instagram.trim() || null,
           facebook: facebook.trim() || null,
           phone: phone.trim() || null,
-        })
+ })
         .eq("user_id", profile.id);
       if (contactsError) throw contactsError;
 
@@ -92,14 +92,14 @@ export function ProfileForm({
       setSaved(true);
       toast("Profil uložen");
       router.refresh();
-    } catch (err) {
+ } catch (err) {
       const msg = err instanceof Error ? err.message : "Uložení se nepovedlo. Zkus to znovu.";
       setError(msg);
       toast("Uložení se nepovedlo.", "error");
-    } finally {
+ } finally {
       setLoading(false);
-    }
-  }
+ }
+ }
 
   const displayPhoto = photoPreview ?? photoUrl;
 
@@ -120,7 +120,7 @@ export function ProfileForm({
           <input
             type="file"
             accept="image/*"
-            className="hidden"
+           className="hidden"
             onChange={(e) => handlePhotoSelected(e.target.files?.[0] ?? null)}
           />
         </label>
@@ -135,7 +135,7 @@ export function ProfileForm({
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+         className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -152,7 +152,7 @@ export function ProfileForm({
             inputMode="numeric"
             value={age}
             onChange={(e) => setAge(e.target.value)}
-            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+           className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div>
@@ -167,7 +167,7 @@ export function ProfileForm({
             value={maxBudget}
             onChange={(e) => setMaxBudget(e.target.value)}
             placeholder="9000"
-            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+           className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
       </div>
@@ -182,7 +182,7 @@ export function ProfileForm({
             value={university}
             onChange={(e) => setUniversity(e.target.value)}
             placeholder="VUT"
-            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+           className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div>
@@ -194,7 +194,7 @@ export function ProfileForm({
             value={faculty}
             onChange={(e) => setFaculty(e.target.value)}
             placeholder="FIT"
-            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+           className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
       </div>
@@ -208,7 +208,7 @@ export function ProfileForm({
           value={preferredLocation}
           onChange={(e) => setPreferredLocation(e.target.value)}
           placeholder="Brno-střed"
-          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+         className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -221,8 +221,8 @@ export function ProfileForm({
           rows={3}
           value={bio}
           onChange={(e) => setBio(e.target.value)}
-          placeholder="Pár vět o tobě — obor, zvyky, co hledáš za spolubydlení..."
-          className="w-full resize-none rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+          placeholder="Pár vět o tobě — co studuješ, od kdy hledáš, s kým bys bydlel…"
+         className="w-full resize-none rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -236,7 +236,7 @@ export function ProfileForm({
             value={instagram}
             onChange={(e) => setInstagram(e.target.value)}
             placeholder="@jana.novak"
-            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+           className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div>
@@ -248,7 +248,7 @@ export function ProfileForm({
             value={facebook}
             onChange={(e) => setFacebook(e.target.value)}
             placeholder="Jana Nováková"
-            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+           className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
       </div>
@@ -262,7 +262,7 @@ export function ProfileForm({
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder="+420 777 123 456"
-          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+         className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
       <p className="-mt-2 text-xs text-muted">
@@ -274,7 +274,7 @@ export function ProfileForm({
       <button
         type="submit"
         disabled={loading}
-        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
+       className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98] disabled:opacity-60"
       >
         {loading ? (
           <Loader2 className="h-4 w-4 animate-spin" />
@@ -284,7 +284,7 @@ export function ProfileForm({
             Uloženo
           </>
         ) : (
-          "Uložit profil"
+ "Uložit profil"
         )}
       </button>
     </form>

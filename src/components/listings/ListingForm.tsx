@@ -39,16 +39,16 @@ export function ListingForm({ listing }: { listing?: Listing }) {
     const files = Array.from(fileList).slice(0, MAX_PHOTOS - totalPhotoCount);
     setNewFiles((prev) => [...prev, ...files]);
     setNewPreviews((prev) => [...prev, ...files.map((f) => URL.createObjectURL(f))]);
-  }
+ }
 
   function removeExistingPhoto(url: string) {
     setExistingPhotos((prev) => prev.filter((p) => p !== url));
-  }
+ }
 
   function removeNewPhoto(index: number) {
     setNewFiles((prev) => prev.filter((_, i) => i !== index));
     setNewPreviews((prev) => prev.filter((_, i) => i !== index));
-  }
+ }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -58,13 +58,13 @@ export function ListingForm({ listing }: { listing?: Listing }) {
     const supabase = createClient();
     const {
       data: { user },
-    } = await supabase.auth.getUser();
+ } = await supabase.auth.getUser();
 
     if (!user) {
       setError("Musíš být přihlášený/á.");
       setLoading(false);
       return;
-    }
+ }
 
     try {
       const uploadedUrls: string[] = [];
@@ -74,7 +74,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
         if (uploadError) throw uploadError;
         const { data: publicUrl } = supabase.storage.from("listings").getPublicUrl(path);
         uploadedUrls.push(publicUrl.publicUrl);
-      }
+ }
 
       const payload = {
         title: title.trim(),
@@ -86,7 +86,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
         description: description.trim() || null,
         tags: parseTags(tagsInput),
         photos: [...existingPhotos, ...uploadedUrls],
-      };
+ };
 
       if (isEdit && listing) {
         const { error: updateError } = await supabase
@@ -96,7 +96,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
         if (updateError) throw updateError;
         toast("Inzerát uložen");
         router.push(`/listings/${listing.id}`);
-      } else {
+ } else {
         const { data: inserted, error: insertError } = await supabase
           .from("listings")
           .insert({ ...payload, owner_id: user.id })
@@ -105,15 +105,15 @@ export function ListingForm({ listing }: { listing?: Listing }) {
         if (insertError) throw insertError;
         toast("Inzerát zveřejněn");
         router.push(`/listings/${inserted.id}`);
-      }
+ }
       router.refresh();
-    } catch (err) {
+ } catch (err) {
       const msg = err instanceof Error ? err.message : "Něco se nepovedlo. Zkus to znovu.";
       setError(msg);
       toast("Uložení se nepovedlo.", "error");
       setLoading(false);
-    }
-  }
+ }
+ }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 pb-6">
@@ -126,7 +126,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
               <button
                 type="button"
                 onClick={() => removeExistingPhoto(url)}
-                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-white"
+               className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-white"
                 aria-label="Odebrat fotku"
               >
                 <X className="h-3 w-3" />
@@ -140,7 +140,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
               <button
                 type="button"
                 onClick={() => removeNewPhoto(i)}
-                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-white"
+               className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-white"
                 aria-label="Odebrat fotku"
               >
                 <X className="h-3 w-3" />
@@ -155,7 +155,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
                 type="file"
                 accept="image/*"
                 multiple
-                className="hidden"
+               className="hidden"
                 onChange={(e) => handleFilesSelected(e.target.files)}
               />
             </label>
@@ -173,7 +173,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Slunný pokoj u VUT"
-          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+         className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -191,7 +191,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             placeholder="8000"
-            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+           className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div>
@@ -206,7 +206,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
             inputMode="numeric"
             value={rooms}
             onChange={(e) => setRooms(e.target.value)}
-            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+           className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
       </div>
@@ -221,7 +221,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
             required
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+           className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
         <div>
@@ -233,7 +233,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Královo Pole"
-            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+           className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
           />
         </div>
       </div>
@@ -247,7 +247,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
           type="date"
           value={availableFrom ?? ""}
           onChange={(e) => setAvailableFrom(e.target.value)}
-          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+         className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -260,8 +260,8 @@ export function ListingForm({ listing }: { listing?: Listing }) {
           rows={4}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Krátce popiš pokoj, byt a spolubydlící..."
-          className="w-full resize-none rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+          placeholder="Popiš pokoj, byt a kdo v něm bydlí. Čím konkrétnější, tím líp…"
+         className="w-full resize-none rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -274,7 +274,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
           value={tagsInput}
           onChange={(e) => setTagsInput(e.target.value)}
           placeholder="balkón, po rekonstrukci, MHD 5 min"
-          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+         className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
         />
       </div>
 
@@ -283,7 +283,7 @@ export function ListingForm({ listing }: { listing?: Listing }) {
       <button
         type="submit"
         disabled={loading}
-        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black shadow-glow-sm transition-transform active:scale-[0.98] disabled:opacity-60"
+       className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-primary py-3.5 text-sm font-semibold text-black transition-transform active:scale-[0.98] disabled:opacity-60"
       >
         {loading && <Loader2 className="h-4 w-4 animate-spin" />}
         {isEdit ? "Uložit změny" : "Zveřejnit inzerát"}

@@ -19,8 +19,8 @@ export function ActionButtons({
         onClick={onPass}
         disabled={disabled}
         aria-label="Přeskočit"
-        className={cn(
-          "flex h-14 w-14 items-center justify-center rounded-full border border-line bg-surface text-fg/70 transition-transform active:scale-90",
+       className={cn(
+ "flex h-14 w-14 items-center justify-center rounded-full border border-line bg-surface text-fg/70 transition-transform active:scale-90",
           disabled && "opacity-50"
         )}
       >
@@ -31,8 +31,8 @@ export function ActionButtons({
         onClick={onLike}
         disabled={disabled}
         aria-label="Uložit mezi oblíbené"
-        className={cn(
-          "flex h-16 w-16 items-center justify-center rounded-full bg-accent text-black shadow-glow transition-transform active:scale-90",
+       className={cn(
+ "flex h-16 w-16 items-center justify-center rounded-full bg-accent text-black  transition-transform active:scale-90",
           disabled && "opacity-50"
         )}
       >
