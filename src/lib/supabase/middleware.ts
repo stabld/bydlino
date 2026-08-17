@@ -50,7 +50,7 @@ export async function updateSession(request: NextRequest) {
 
   // Přihlášený uživatel nemá co dělat na landing page ani v auth formulářích.
   if (user && (pathname === "/" || pathname === "/login" || pathname === "/register")) {
-    return NextResponse.redirect(new URL("/listings", request.url));
+    return NextResponse.redirect(new URL("/swipe", request.url));
   }
 
   return response;

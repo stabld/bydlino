@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Loader2, Camera, Check } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { parseTags, randomFileName, initials } from "@/lib/utils";
+import { randomFileName, initials } from "@/lib/utils";
 import { useToast } from "@/components/shared/Toast";
 import type { Profile, ProfileContacts } from "@/lib/types";
 
@@ -28,11 +28,11 @@ export function ProfileForm({
   const [university, setUniversity] = useState(profile.university ?? "");
   const [faculty, setFaculty] = useState(profile.faculty ?? "");
   const [bio, setBio] = useState(profile.bio ?? "");
-  const [tagsInput, setTagsInput] = useState(profile.lifestyle_tags?.join(", ") ?? "");
   const [preferredLocation, setPreferredLocation] = useState(profile.preferred_location ?? "");
   const [maxBudget, setMaxBudget] = useState(profile.max_budget?.toString() ?? "");
   const [instagram, setInstagram] = useState(contacts?.instagram ?? "");
   const [facebook, setFacebook] = useState(contacts?.facebook ?? "");
+  const [phone, setPhone] = useState(contacts?.phone ?? "");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,7 +70,6 @@ export function ProfileForm({
           university: university.trim() || null,
           faculty: faculty.trim() || null,
           bio: bio.trim() || null,
-          lifestyle_tags: parseTags(tagsInput),
           preferred_location: preferredLocation.trim() || null,
           max_budget: maxBudget ? Number(maxBudget) : null,
           photo_url: nextPhotoUrl,
@@ -83,6 +82,7 @@ export function ProfileForm({
         .update({
           instagram: instagram.trim() || null,
           facebook: facebook.trim() || null,
+          phone: phone.trim() || null,
         })
         .eq("user_id", profile.id);
       if (contactsError) throw contactsError;
@@ -226,19 +226,6 @@ export function ProfileForm({
         />
       </div>
 
-      <div>
-        <label htmlFor="tags" className="mb-1.5 block text-xs font-medium text-muted">
-          Lifestyle tagy (odděl čárkou)
-        </label>
-        <input
-          id="tags"
-          value={tagsInput}
-          onChange={(e) => setTagsInput(e.target.value)}
-          placeholder="nekuřák/ka, ranní ptáče, čistotný/á"
-          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
-        />
-      </div>
-
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor="instagram" className="mb-1.5 block text-xs font-medium text-muted">
@@ -265,8 +252,21 @@ export function ProfileForm({
           />
         </div>
       </div>
+      <div>
+        <label htmlFor="phone" className="mb-1.5 block text-xs font-medium text-muted">
+          Telefon
+        </label>
+        <input
+          id="phone"
+          type="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="+420 777 123 456"
+          className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-fg outline-none focus:border-accent"
+        />
+      </div>
       <p className="-mt-2 text-xs text-muted">
-        Instagram a Facebook uvidí ostatní až po vzájemném matchi.
+        Kontakt uvidí jen lidé, se kterými řešíš konkrétní inzerát.
       </p>
 
       {error && <p className="text-sm text-accent">{error}</p>}

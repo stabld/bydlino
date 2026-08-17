@@ -45,10 +45,11 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
 
   const { data: savedRow } = user
     ? await supabase
-        .from("saved_listings")
+        .from("listing_swipes")
         .select("listing_id")
         .eq("user_id", user.id)
         .eq("listing_id", listing.id)
+        .eq("direction", "like")
         .maybeSingle()
     : { data: null };
 
@@ -230,7 +231,7 @@ export default async function ListingDetailPage({ params }: { params: { id: stri
 
                     {(contacts?.instagram || contacts?.facebook) && (
                       <p className="mt-2 font-mono text-xs text-accent">
-                        {[contacts?.instagram, contacts?.facebook].filter(Boolean).join("  ·  ")}
+                        {[contacts?.instagram, contacts?.facebook, contacts?.phone].filter(Boolean).join("  ·  ")}
                       </p>
                     )}
                   </div>

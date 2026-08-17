@@ -52,7 +52,11 @@ export default async function ListingsPage({ searchParams }: { searchParams: Sea
 
   // Které z nich mám uložené, ať se záložka rovnou vykreslí správně.
   const { data: savedRows } = user
-    ? await supabase.from("saved_listings").select("listing_id").eq("user_id", user.id)
+    ? await supabase
+        .from("listing_swipes")
+        .select("listing_id")
+        .eq("user_id", user.id)
+        .eq("direction", "like")
     : { data: null };
   const savedIds = new Set((savedRows ?? []).map((r) => r.listing_id));
 

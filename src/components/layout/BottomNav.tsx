@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Users, CircleUserRound } from "lucide-react";
+import { Home, Flame, Bookmark, CircleUserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
-  { href: "/listings", label: "Hledat pokoj", icon: Home },
-  { href: "/roommates", label: "Spolubydlící", icon: Users },
+  { href: "/swipe", label: "Procházet", icon: Flame },
+  { href: "/listings", label: "Nabídky", icon: Home },
+  { href: "/saved", label: "Uložené", icon: Bookmark },
   { href: "/profile", label: "Profil", icon: CircleUserRound },
 ];
 

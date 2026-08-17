@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Send, Check, Instagram, Facebook } from "lucide-react";
+import { Loader2, Send, Check, Instagram, Facebook, Phone } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/shared/Toast";
 import type { ProfileContacts } from "@/lib/types";
@@ -84,7 +84,7 @@ export function InterestButton({
           Projevil/a jsi zájem
         </div>
 
-        {contacts?.instagram || contacts?.facebook ? (
+        {contacts?.instagram || contacts?.facebook || contacts?.phone ? (
           <>
             <p className="mt-2 text-sm text-muted">
               Ozvi se {ownerName} napřímo:
@@ -101,6 +101,15 @@ export function InterestButton({
                   <Facebook className="h-3.5 w-3.5" strokeWidth={1.75} />
                   {contacts.facebook}
                 </span>
+              )}
+              {contacts?.phone && (
+                <a
+                  href={`tel:${contacts.phone.replace(/\s/g, "")}`}
+                  className="inline-flex items-center gap-1.5 rounded-tag border border-line bg-surface px-3 py-1.5 text-xs font-medium text-fg"
+                >
+                  <Phone className="h-3.5 w-3.5" strokeWidth={1.75} />
+                  {contacts.phone}
+                </a>
               )}
             </div>
           </>

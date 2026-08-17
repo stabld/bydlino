@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Search, Users, ShieldCheck } from "lucide-react";
+import { ArrowRight, Flame, Bookmark, ShieldCheck } from "lucide-react";
 
 export const metadata = {
   title: "Bydlino — najdi pokoj i spolubydlícího v Brně",
@@ -7,19 +7,19 @@ export const metadata = {
 
 const STEPS = [
   {
-    icon: Search,
-    title: "Projdi pokoje",
-    text: "Inzeráty od studentů a majitelů z Brna. Filtruj podle čtvrti, ceny a velikosti.",
+    icon: Flame,
+    title: "Swipuj byty",
+    text: "Doprava uložíš, doleva přeskočíš. Rychlejší než scrollovat inzertní weby.",
   },
   {
-    icon: Users,
-    title: "Najdi spolubydlícího",
-    text: "Swipuj profily studentů. Když se líbíte navzájem, odemknou se vám kontakty.",
+    icon: Bookmark,
+    title: "Uložené na jednom místě",
+    text: "Všechny byty, co se ti líbily, najdeš pohromadě i s cenou a termínem.",
   },
   {
     icon: ShieldCheck,
     title: "Domluvte se napřímo",
-    text: "Žádný prostředník ani provize. Kontakt si předáte a zbytek je na vás.",
+    text: "Klikneš Mám zájem, odemkne se kontakt na inzerenta. Žádná provize.",
   },
 ];
 
@@ -40,14 +40,14 @@ export default function LandingPage() {
         </span>
 
         <h1 className="mt-5 font-display text-[2.6rem] font-bold leading-[1.05] text-fg">
-          Pokoj hledáš sám.
+          Hledání bytu,
           <br />
-          <span className="text-accent">Spolubydlícího taky?</span>
+          <span className="text-accent">konečně bez scrollování.</span>
         </h1>
 
         <p className="mt-4 text-[15px] leading-relaxed text-muted">
-          Bydlino spojuje obojí na jednom místě. Projdi si volné pokoje v Brně, nebo si najdi
-          někoho, s kým si byt vezmete napůl.
+          Studentské pokoje a byty v Brně. Swipuješ jako na Tinderu — co se ti líbí, uložíš,
+          a s inzerentem se domluvíš napřímo.
         </p>
 
         <div className="mt-7 flex flex-col gap-2.5">
@@ -89,8 +89,8 @@ export default function LandingPage() {
       <section className="mt-14 rounded-card border border-line bg-surface p-6 text-center">
         <h2 className="font-display text-lg font-semibold text-fg">Startujeme v Brně</h2>
         <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-muted">
-          Bydlino je čerstvý projekt. Čím dřív se přidáš, tím dřív uvidíš nabídky ostatních
-          studentů — a oni tvoje.
+          Bydlino je čerstvý projekt. Přidáváme nové inzeráty průběžně — a pokud sám
+          pronajímáš, můžeš svůj přidat hned.
         </p>
         <Link
           href="/register"

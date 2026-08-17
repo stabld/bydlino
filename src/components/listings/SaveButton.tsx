@@ -41,9 +41,14 @@ export function SaveButton({
     }
 
     const { error } = next
-      ? await supabase.from("saved_listings").insert({ user_id: user.id, listing_id: listingId })
+      ? await supabase
+          .from("listing_swipes")
+          .upsert(
+            { user_id: user.id, listing_id: listingId, direction: "like" as const },
+            { onConflict: "user_id,listing_id" }
+          )
       : await supabase
-          .from("saved_listings")
+          .from("listing_swipes")
           .delete()
           .eq("user_id", user.id)
           .eq("listing_id", listingId);

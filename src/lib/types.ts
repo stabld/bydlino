@@ -5,7 +5,6 @@ export type Profile = {
   university: string | null;
   faculty: string | null;
   bio: string | null;
-  lifestyle_tags: string[];
   preferred_location: string | null;
   max_budget: number | null;
   photo_url: string | null;
@@ -17,6 +16,7 @@ export type ProfileContacts = {
   user_id: string;
   instagram: string | null;
   facebook: string | null;
+  phone: string | null;
   updated_at: string;
 };
 
@@ -36,35 +36,12 @@ export type Listing = {
   updated_at: string;
 };
 
-export type ListingWithOwner = Listing & {
-  owner: Pick<Profile, "id" | "name" | "photo_url"> | null;
-};
-
 export type SwipeDirection = "like" | "pass";
 
-export type Swipe = {
-  id: string;
-  from_user: string;
-  to_user: string;
-  direction: SwipeDirection;
-  created_at: string;
-};
-
-export type Match = {
-  id: string;
-  user_a: string;
-  user_b: string;
-  created_at: string;
-};
-
-export type MatchWithProfile = Match & {
-  otherProfile: Profile;
-  contacts: ProfileContacts | null;
-};
-
-export type SavedListing = {
+export type ListingSwipe = {
   user_id: string;
   listing_id: string;
+  direction: SwipeDirection;
   created_at: string;
 };
 
@@ -108,26 +85,10 @@ export type Database = {
         Update: Partial<Listing>;
         Relationships: [];
       };
-      swipes: {
-        Row: Swipe;
-        Insert: Partial<Swipe> & {
-          from_user: string;
-          to_user: string;
-          direction: SwipeDirection;
-        };
-        Update: Partial<Swipe>;
-        Relationships: [];
-      };
-      matches: {
-        Row: Match;
-        Insert: Partial<Match> & { user_a: string; user_b: string };
-        Update: Partial<Match>;
-        Relationships: [];
-      };
-      saved_listings: {
-        Row: SavedListing;
-        Insert: { user_id: string; listing_id: string };
-        Update: Partial<SavedListing>;
+      listing_swipes: {
+        Row: ListingSwipe;
+        Insert: { user_id: string; listing_id: string; direction: SwipeDirection };
+        Update: Partial<ListingSwipe>;
         Relationships: [];
       };
       listing_interests: {

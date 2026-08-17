@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, X } from "lucide-react";
+import { Bookmark, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function ActionButtons({
@@ -30,13 +30,13 @@ export function ActionButtons({
         type="button"
         onClick={onLike}
         disabled={disabled}
-        aria-label="Líbí se mi"
+        aria-label="Uložit mezi oblíbené"
         className={cn(
-          "flex h-16 w-16 items-center justify-center rounded-full bg-gradient-primary text-black shadow-glow transition-transform active:scale-90",
+          "flex h-16 w-16 items-center justify-center rounded-full bg-accent text-black shadow-glow transition-transform active:scale-90",
           disabled && "opacity-50"
         )}
       >
-        <Heart className="h-7 w-7" strokeWidth={2.25} fill="currentColor" />
+        <Bookmark className="h-7 w-7" strokeWidth={2.25} fill="currentColor" />
       </button>
     </div>
   );

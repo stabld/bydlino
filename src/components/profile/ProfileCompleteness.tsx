@@ -16,9 +16,9 @@ export function ProfileCompleteness({
     { label: "Jméno", done: Boolean(profile.name?.trim()) },
     { label: "Škola", done: Boolean(profile.university || profile.faculty) },
     { label: "Bio", done: Boolean(profile.bio?.trim()) },
-    { label: "Tagy", done: (profile.lifestyle_tags?.length ?? 0) > 0 },
+    { label: "Lokalita", done: Boolean(profile.preferred_location) },
     { label: "Rozpočet", done: Boolean(profile.max_budget) },
-    { label: "Kontakt", done: Boolean(contacts?.instagram || contacts?.facebook) },
+    { label: "Kontakt", done: Boolean(contacts?.instagram || contacts?.facebook || contacts?.phone) },
   ];
 
   const done = checks.filter((c) => c.done).length;
@@ -30,7 +30,7 @@ export function ProfileCompleteness({
       <div className="rounded-card border border-accent/40 bg-accent-soft px-4 py-3">
         <p className="text-sm font-semibold text-accent">Profil je kompletní</p>
         <p className="mt-0.5 text-xs text-muted">
-          Takhle tě uvidí ostatní studenti při swipování.
+          Inzerenti uvidí, kdo jim píše — to výrazně zvyšuje šanci na odpověď.
         </p>
       </div>
     );

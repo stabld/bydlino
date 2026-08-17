@@ -1,16 +1,25 @@
 -- ============================================================================
--- ROOMY — Supabase schema
+-- BYDLINO — Supabase schema
 -- Spusť celý tento soubor v Supabase Dashboard -> SQL Editor -> New query.
--- Bezpečný na opakované spuštění (create ... if not exists / on conflict).
+-- Bezpečný na opakované spuštění.
 -- ============================================================================
 
 create extension if not exists "pgcrypto";
+
+-- ----------------------------------------------------------------------------
+-- 0. ÚKLID PO STARŠÍ VERZI (hledání spolubydlícího přes swipe na lidi)
+-- Pokud jsi dřív spustil starší schéma, tyhle tabulky už nejsou potřeba.
+-- ----------------------------------------------------------------------------
+drop table if exists public.matches cascade;
+drop table if exists public.swipes cascade;
+drop table if exists public.saved_listings cascade;
+drop function if exists public.handle_swipe_match() cascade;
 
 -- ============================================================================
 -- 1. TABULKY
 -- ============================================================================
 
--- Veřejný profil uživatele. 1:1 s auth.users, id je stejné jako auth.users.id.
+-- Profil uživatele. 1:1 s auth.users.
 create table if not exists public.profiles (
   id                 uuid primary key references auth.users(id) on delete cascade,
   name               text not null default '',
@@ -18,7 +27,6 @@ create table if not exists public.profiles (
   university         text,
   faculty            text,
   bio                text,
-  lifestyle_tags     text[] not null default '{}',
   preferred_location text,
   max_budget         int,
   photo_url          text,
@@ -26,19 +34,25 @@ create table if not exists public.profiles (
   updated_at         timestamptz not null default now()
 );
 
-comment on table public.profiles is 'Veřejný profil studenta. Čitelný pro všechny přihlášené uživatele (nutné pro swipe a inzeráty).';
+comment on table public.profiles is 'Profil uživatele. Slouží k tomu, aby inzerent věděl, kdo mu píše.';
 
--- Citlivé kontaktní údaje. Oddělené od profiles, aby šly schovat, dokud nevznikne match.
+-- Migrace ze starší verze: sloupec lifestyle_tags už není potřeba.
+alter table public.profiles drop column if exists lifestyle_tags;
+
+-- Citlivé kontaktní údaje, oddělené od profilu.
 create table if not exists public.profile_contacts (
   user_id     uuid primary key references public.profiles(id) on delete cascade,
   instagram   text,
   facebook    text,
+  phone       text,
   updated_at  timestamptz not null default now()
 );
 
-comment on table public.profile_contacts is 'Instagram/Facebook — čitelné pouze vlastníkem nebo po vzniku matche.';
+comment on table public.profile_contacts is 'Kontakt — viditelný až po projeveném zájmu o inzerát.';
 
--- Inzeráty pokojů/bydlení.
+alter table public.profile_contacts add column if not exists phone text;
+
+-- Inzeráty pokojů/bytů.
 create table if not exists public.listings (
   id              uuid primary key default gen_random_uuid(),
   owner_id        uuid not null references public.profiles(id) on delete cascade,
@@ -55,39 +69,37 @@ create table if not exists public.listings (
   updated_at      timestamptz not null default now()
 );
 
-comment on table public.listings is 'Inzeráty pokojů. Upravovat smí pouze owner_id.';
+comment on table public.listings is 'Inzeráty. Upravovat smí pouze owner_id.';
 
--- Swipe (like/pass) mezi dvěma uživateli při hledání spolubydlícího.
-create table if not exists public.swipes (
-  id          uuid primary key default gen_random_uuid(),
-  from_user   uuid not null references public.profiles(id) on delete cascade,
-  to_user     uuid not null references public.profiles(id) on delete cascade,
+-- Swipe na INZERÁT. 'like' = uložený mezi oblíbené, 'pass' = už ho neukazuj.
+create table if not exists public.listing_swipes (
+  user_id     uuid not null references public.profiles(id) on delete cascade,
+  listing_id  uuid not null references public.listings(id) on delete cascade,
   direction   text not null check (direction in ('like', 'pass')),
   created_at  timestamptz not null default now(),
-  constraint swipes_no_self check (from_user <> to_user),
-  constraint swipes_unique unique (from_user, to_user)
+  primary key (user_id, listing_id)
 );
 
-comment on table public.swipes is 'Jeden řádek = jeden swipe jedním směrem. Match se dopočítává triggerem.';
+comment on table public.listing_swipes is 'Jeden řádek = rozhodnutí uživatele o jednom inzerátu. like = uloženo.';
 
--- Vzájemný match. NIKDY se nezapisuje přímo z klienta — pouze přes trigger níže.
-create table if not exists public.matches (
+-- Projevený zájem o inzerát — jediná cesta k odemčení kontaktu.
+create table if not exists public.listing_interests (
   id          uuid primary key default gen_random_uuid(),
-  user_a      uuid not null references public.profiles(id) on delete cascade,
-  user_b      uuid not null references public.profiles(id) on delete cascade,
+  listing_id  uuid not null references public.listings(id) on delete cascade,
+  user_id     uuid not null references public.profiles(id) on delete cascade,
+  message     text,
   created_at  timestamptz not null default now(),
-  constraint matches_ordered check (user_a < user_b),
-  constraint matches_unique unique (user_a, user_b)
+  constraint listing_interests_unique unique (listing_id, user_id)
 );
 
-comment on table public.matches is 'Vzniká automaticky (trigger handle_swipe_match), když se dva lidi navzájem likenou.';
+comment on table public.listing_interests is 'Projevený zájem. Odemyká kontakt mezi zájemcem a majitelem inzerátu.';
 
 create index if not exists idx_listings_owner on public.listings(owner_id);
 create index if not exists idx_listings_city on public.listings(city);
-create index if not exists idx_swipes_from on public.swipes(from_user);
-create index if not exists idx_swipes_to on public.swipes(to_user);
-create index if not exists idx_matches_user_a on public.matches(user_a);
-create index if not exists idx_matches_user_b on public.matches(user_b);
+create index if not exists idx_listings_price on public.listings(price);
+create index if not exists idx_swipes_user on public.listing_swipes(user_id);
+create index if not exists idx_interests_listing on public.listing_interests(listing_id);
+create index if not exists idx_interests_user on public.listing_interests(user_id);
 
 -- ============================================================================
 -- 2. AUTOMATICKÉ ZALOŽENÍ PROFILU PŘI REGISTRACI
@@ -118,66 +130,14 @@ create trigger on_auth_user_created
   for each row execute function public.handle_new_user();
 
 -- ============================================================================
--- 3. BEZPEČNÝ VÝPOČET MATCHE (backend, ne frontend)
---
--- Match smí vzniknout POUZE tehdy, když v tabulce swipes existují oba
--- směry 'like'. Tato funkce běží jako SECURITY DEFINER (vlastník postgres),
--- takže obchází RLS pouze pro samotný insert do matches — klient sám do
--- matches nikdy zapisovat nemůže (viz policies níže, žádná insert policy).
--- ============================================================================
-
-create or replace function public.handle_swipe_match()
-returns trigger
-language plpgsql
-security definer
-set search_path = public
-as $$
-declare
-  reverse_like_exists boolean;
-  ua uuid;
-  ub uuid;
-begin
-  if new.direction = 'like' then
-    select exists (
-      select 1 from public.swipes
-      where from_user = new.to_user
-        and to_user = new.from_user
-        and direction = 'like'
-    ) into reverse_like_exists;
-
-    if reverse_like_exists then
-      if new.from_user < new.to_user then
-        ua := new.from_user;
-        ub := new.to_user;
-      else
-        ua := new.to_user;
-        ub := new.from_user;
-      end if;
-
-      insert into public.matches (user_a, user_b)
-      values (ua, ub)
-      on conflict (user_a, user_b) do nothing;
-    end if;
-  end if;
-
-  return new;
-end;
-$$;
-
-drop trigger if exists on_swipe_created on public.swipes;
-create trigger on_swipe_created
-  after insert on public.swipes
-  for each row execute function public.handle_swipe_match();
-
--- ============================================================================
--- 4. ROW LEVEL SECURITY
+-- 3. ROW LEVEL SECURITY
 -- ============================================================================
 
 alter table public.profiles enable row level security;
 alter table public.profile_contacts enable row level security;
 alter table public.listings enable row level security;
-alter table public.swipes enable row level security;
-alter table public.matches enable row level security;
+alter table public.listing_swipes enable row level security;
+alter table public.listing_interests enable row level security;
 
 -- --- profiles ---------------------------------------------------------------
 drop policy if exists "profiles_select_authenticated" on public.profiles;
@@ -202,16 +162,25 @@ create policy "profiles_delete_own" on public.profiles
   using (auth.uid() = id);
 
 -- --- profile_contacts --------------------------------------------------------
--- Vlastní kontakt vidí uživatel vždy; cizí kontakt pouze existuje-li match.
+-- Cizí kontakt je čitelný jen tehdy, když mezi lidmi existuje vztah
+-- "zájem o inzerát" — v jednom nebo druhém směru.
 drop policy if exists "contacts_select_own_or_matched" on public.profile_contacts;
-create policy "contacts_select_own_or_matched" on public.profile_contacts
+drop policy if exists "contacts_select_own_or_interested" on public.profile_contacts;
+create policy "contacts_select_own_or_interested" on public.profile_contacts
   for select to authenticated
   using (
     auth.uid() = user_id
     or exists (
-      select 1 from public.matches m
-      where (m.user_a = auth.uid() and m.user_b = profile_contacts.user_id)
-         or (m.user_b = auth.uid() and m.user_a = profile_contacts.user_id)
+      select 1
+      from public.listing_interests i
+      join public.listings l on l.id = i.listing_id
+      where l.owner_id = auth.uid() and i.user_id = profile_contacts.user_id
+    )
+    or exists (
+      select 1
+      from public.listing_interests i
+      join public.listings l on l.id = i.listing_id
+      where i.user_id = auth.uid() and l.owner_id = profile_contacts.user_id
     )
   );
 
@@ -248,27 +217,60 @@ create policy "listings_delete_own" on public.listings
   for delete to authenticated
   using (auth.uid() = owner_id);
 
--- --- swipes --------------------------------------------------------------------
-drop policy if exists "swipes_insert_own" on public.swipes;
-create policy "swipes_insert_own" on public.swipes
+-- --- listing_swipes -----------------------------------------------------------
+-- Uživatel vidí a spravuje výhradně vlastní swipy.
+drop policy if exists "listing_swipes_select_own" on public.listing_swipes;
+create policy "listing_swipes_select_own" on public.listing_swipes
+  for select to authenticated
+  using (auth.uid() = user_id);
+
+drop policy if exists "listing_swipes_insert_own" on public.listing_swipes;
+create policy "listing_swipes_insert_own" on public.listing_swipes
   for insert to authenticated
-  with check (auth.uid() = from_user);
+  with check (auth.uid() = user_id);
 
-drop policy if exists "swipes_select_involving_self" on public.swipes;
-create policy "swipes_select_involving_self" on public.swipes
-  for select to authenticated
-  using (auth.uid() = from_user or auth.uid() = to_user);
+drop policy if exists "listing_swipes_update_own" on public.listing_swipes;
+create policy "listing_swipes_update_own" on public.listing_swipes
+  for update to authenticated
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
 
--- --- matches ---------------------------------------------------------------------
--- Záměrně ŽÁDNÁ insert/update/delete policy pro authenticated role.
--- Jediná cesta k zápisu je trigger handle_swipe_match (SECURITY DEFINER).
-drop policy if exists "matches_select_involving_self" on public.matches;
-create policy "matches_select_involving_self" on public.matches
+drop policy if exists "listing_swipes_delete_own" on public.listing_swipes;
+create policy "listing_swipes_delete_own" on public.listing_swipes
+  for delete to authenticated
+  using (auth.uid() = user_id);
+
+-- --- listing_interests ----------------------------------------------------------
+-- O vlastní inzerát nejde projevit zájem — hlídá to databáze, ne frontend.
+drop policy if exists "interests_insert_own" on public.listing_interests;
+create policy "interests_insert_own" on public.listing_interests
+  for insert to authenticated
+  with check (
+    auth.uid() = user_id
+    and not exists (
+      select 1 from public.listings l
+      where l.id = listing_id and l.owner_id = auth.uid()
+    )
+  );
+
+drop policy if exists "interests_select_involved" on public.listing_interests;
+create policy "interests_select_involved" on public.listing_interests
   for select to authenticated
-  using (auth.uid() = user_a or auth.uid() = user_b);
+  using (
+    auth.uid() = user_id
+    or exists (
+      select 1 from public.listings l
+      where l.id = listing_interests.listing_id and l.owner_id = auth.uid()
+    )
+  );
+
+drop policy if exists "interests_delete_own" on public.listing_interests;
+create policy "interests_delete_own" on public.listing_interests
+  for delete to authenticated
+  using (auth.uid() = user_id);
 
 -- ============================================================================
--- 5. STORAGE — buckety pro fotky profilu a inzerátů
+-- 4. STORAGE — buckety pro fotky profilu a inzerátů
 -- ============================================================================
 
 insert into storage.buckets (id, name, public)
@@ -279,13 +281,11 @@ insert into storage.buckets (id, name, public)
 values ('listings', 'listings', true)
 on conflict (id) do nothing;
 
--- Cesta k souboru musí začínat auth.uid() uživatele, např. "<uid>/photo.jpg".
--- Tím zaručíme, že uživatel může nahrávat pouze do vlastní složky.
+-- Cesta souboru musí začínat auth.uid(), např. "<uid>/photo.jpg".
 
 drop policy if exists "avatars_public_read" on storage.objects;
 create policy "avatars_public_read" on storage.objects
-  for select
-  using (bucket_id = 'avatars');
+  for select using (bucket_id = 'avatars');
 
 drop policy if exists "avatars_owner_write" on storage.objects;
 create policy "avatars_owner_write" on storage.objects
@@ -304,8 +304,7 @@ create policy "avatars_owner_delete" on storage.objects
 
 drop policy if exists "listings_photos_public_read" on storage.objects;
 create policy "listings_photos_public_read" on storage.objects
-  for select
-  using (bucket_id = 'listings');
+  for select using (bucket_id = 'listings');
 
 drop policy if exists "listings_photos_owner_write" on storage.objects;
 create policy "listings_photos_owner_write" on storage.objects
@@ -323,126 +322,6 @@ create policy "listings_photos_owner_delete" on storage.objects
   using (bucket_id = 'listings' and (storage.foldername(name))[1] = auth.uid()::text);
 
 -- ============================================================================
--- Hotovo. Ověření: v Table editoru by měly být profiles, profile_contacts,
--- listings, swipes, matches — všechny s RLS enabled (zámek v UI).
+-- Hotovo. Tabulky: profiles, profile_contacts, listings,
+-- listing_swipes, listing_interests — všechny s RLS.
 -- ============================================================================
-
--- ============================================================================
--- 6. ULOŽENÉ INZERÁTY (oblíbené)
--- ============================================================================
-
-create table if not exists public.saved_listings (
-  user_id     uuid not null references public.profiles(id) on delete cascade,
-  listing_id  uuid not null references public.listings(id) on delete cascade,
-  created_at  timestamptz not null default now(),
-  primary key (user_id, listing_id)
-);
-
-comment on table public.saved_listings is 'Inzeráty, které si uživatel uložil mezi oblíbené. Vidí je jen on sám.';
-
-create index if not exists idx_saved_user on public.saved_listings(user_id);
-
-alter table public.saved_listings enable row level security;
-
-drop policy if exists "saved_select_own" on public.saved_listings;
-create policy "saved_select_own" on public.saved_listings
-  for select to authenticated
-  using (auth.uid() = user_id);
-
-drop policy if exists "saved_insert_own" on public.saved_listings;
-create policy "saved_insert_own" on public.saved_listings
-  for insert to authenticated
-  with check (auth.uid() = user_id);
-
-drop policy if exists "saved_delete_own" on public.saved_listings;
-create policy "saved_delete_own" on public.saved_listings
-  for delete to authenticated
-  using (auth.uid() = user_id);
-
--- ============================================================================
--- 7. ZÁJEM O INZERÁT
---
--- Bez tohohle si zájemce a majitel inzerátu neměli jak předat kontakt.
--- Zájemce klikne na "Mám zájem" -> majitel ho uvidí v seznamu zájemců
--- a oba si navzájem odemknou kontaktní údaje (viz upravená policy níže).
--- ============================================================================
-
-create table if not exists public.listing_interests (
-  id          uuid primary key default gen_random_uuid(),
-  listing_id  uuid not null references public.listings(id) on delete cascade,
-  user_id     uuid not null references public.profiles(id) on delete cascade,
-  message     text,
-  created_at  timestamptz not null default now(),
-  constraint listing_interests_unique unique (listing_id, user_id)
-);
-
-comment on table public.listing_interests is 'Projevený zájem o inzerát. Odemyká kontakt mezi zájemcem a majitelem inzerátu.';
-
-create index if not exists idx_interests_listing on public.listing_interests(listing_id);
-create index if not exists idx_interests_user on public.listing_interests(user_id);
-
-alter table public.listing_interests enable row level security;
-
--- Zájemce nesmí projevit zájem o vlastní inzerát (kontrola na úrovni DB).
-drop policy if exists "interests_insert_own" on public.listing_interests;
-create policy "interests_insert_own" on public.listing_interests
-  for insert to authenticated
-  with check (
-    auth.uid() = user_id
-    and not exists (
-      select 1 from public.listings l
-      where l.id = listing_id and l.owner_id = auth.uid()
-    )
-  );
-
--- Vidí ho zájemce sám a majitel daného inzerátu.
-drop policy if exists "interests_select_involved" on public.listing_interests;
-create policy "interests_select_involved" on public.listing_interests
-  for select to authenticated
-  using (
-    auth.uid() = user_id
-    or exists (
-      select 1 from public.listings l
-      where l.id = listing_interests.listing_id and l.owner_id = auth.uid()
-    )
-  );
-
-drop policy if exists "interests_delete_own" on public.listing_interests;
-create policy "interests_delete_own" on public.listing_interests
-  for delete to authenticated
-  using (auth.uid() = user_id);
-
--- ============================================================================
--- 8. ROZŠÍŘENÍ VIDITELNOSTI KONTAKTŮ
---
--- Kontakt je nově čitelný také tehdy, když mezi dvěma lidmi existuje
--- vztah "zájem o inzerát" (v obou směrech). Match zůstává beze změny.
--- ============================================================================
-
-drop policy if exists "contacts_select_own_or_matched" on public.profile_contacts;
-create policy "contacts_select_own_or_matched" on public.profile_contacts
-  for select to authenticated
-  using (
-    -- vlastní kontakt
-    auth.uid() = user_id
-    -- vzájemný match ze swipování
-    or exists (
-      select 1 from public.matches m
-      where (m.user_a = auth.uid() and m.user_b = profile_contacts.user_id)
-         or (m.user_b = auth.uid() and m.user_a = profile_contacts.user_id)
-    )
-    -- jsem majitel inzerátu a tenhle člověk o něj projevil zájem
-    or exists (
-      select 1
-      from public.listing_interests i
-      join public.listings l on l.id = i.listing_id
-      where l.owner_id = auth.uid() and i.user_id = profile_contacts.user_id
-    )
-    -- projevil jsem zájem o inzerát tohoto člověka
-    or exists (
-      select 1
-      from public.listing_interests i
-      join public.listings l on l.id = i.listing_id
-      where i.user_id = auth.uid() and l.owner_id = profile_contacts.user_id
-    )
-  );

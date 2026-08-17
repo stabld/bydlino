@@ -1,8 +1,8 @@
 # Bydlino
 
-MVP aplikace pro studenty v Brně — hledání pokoje k pronájmu a hledání spolubydlícího
-(Tinder-style swipe). Propojeno konceptem s Remexo (zatím jen placeholder banner, žádná
-skutečná integrace ani monetizace).
+MVP aplikace pro studenty v Brně — hledání pokojů a bytů swipováním jako na Tinderu.
+Propojeno konceptem s Remexo (zatím jen placeholder banner, žádná skutečná integrace
+ani monetizace).
 
 ## Tech stack
 
@@ -14,23 +14,22 @@ skutečná integrace ani monetizace).
 
 ## Funkce v této verzi
 
-- **Landing page** — veřejná úvodní stránka pro nepřihlášené (`/`), odkud se jde
-  registrovat. Přihlášený uživatel je z ní automaticky přesměrován do aplikace.
-- **Hledat pokoj** — katalog inzerátů s fulltextovým hledáním, filtry (čtvrť, max. cena,
-  počet pokojů) a řazením (nejnovější / nejlevnější / nejdražší). Detail inzerátu
-  s galerií fotek, vytvoření/úprava/smazání vlastního inzerátu.
-- **Mám zájem** — zájemce projeví zájem o inzerát (volitelně se zprávou). Tím se oběma
-  stranám odemknou kontakty a majitel uvidí zájemce v seznamu u svého inzerátu.
-- **Uložené pokoje** — záložka na každém inzerátu, uložené se sbírají v přehledu.
-- **Spolubydlící** — swipe karty (like/pass) s možností vrátit poslední swipe zpět,
-  bezpečně vyhodnocený match na backendu, po matchi se odemkne IG/FB kontakt.
-- **Přehled** — shody, uložené pokoje a moje inzeráty na jedné stránce.
-- **Profil** — foto, jméno, věk, univerzita, fakulta, bio, lifestyle tagy, rozpočet,
-  preferovaná lokalita, IG/FB + ukazatel, jak je profil vyplněný.
+- **Landing page** — veřejná úvodní stránka pro nepřihlášené (`/`).
+- **Procházet byty** — hlavní obrazovka. Swipe karty s inzeráty: doprava uložíš,
+  doleva přeskočíš (a už se ti neukáže). Možnost vrátit poslední rozhodnutí zpět.
+- **Nabídky** — klasický katalog s fulltextovým hledáním, filtry (čtvrť, max. cena,
+  počet pokojů) a řazením podle ceny. Detail inzerátu s galerií fotek.
+- **Mám zájem** — zájemce se ozve inzerentovi (volitelně se zprávou). Tím se oběma
+  odemknou kontakty a inzerent uvidí zájemce v seznamu u svého inzerátu.
+- **Uložené** — uložené byty, přehled inzerátů kde ses ozval (i s kontaktem)
+  a tvoje vlastní inzeráty.
+- **Profil** — foto, jméno, věk, škola, bio, rozpočet, preferovaná lokalita,
+  Instagram / Facebook / telefon + ukazatel vyplněnosti.
+- **Vlastní inzerát** — vytvoření, úprava i smazání, s uploadem až 5 fotek.
 - **Remexo banner** — vizuální placeholder v katalogu, zatím bez odkazu.
 
-Záměrně **není** součástí: interní chat, platby, předplatné, notifikace, mapy, AI,
-administrace. Cílem je otestovat základní use-case na studentech, ne stavět sociální síť.
+Záměrně **není** součástí: hledání spolubydlícího, interní chat, platby, předplatné,
+notifikace, mapy, AI, administrace.
 
 ---
 
@@ -42,10 +41,9 @@ administrace. Cílem je otestovat základní use-case na studentech, ne stavět 
 3. V **SQL Editor** vytvoř novou query, vlož celý obsah souboru `supabase/schema.sql`
    z tohoto repa a spusť ho. Soubor je bezpečný na opakované spuštění, takže když
    ho spustíš znovu po aktualizaci aplikace, jen doplní chybějící části. Vytvoří se:
-   - tabulky `profiles`, `profile_contacts`, `listings`, `swipes`, `matches`,
-     `saved_listings`, `listing_interests`
+   - tabulky `profiles`, `profile_contacts`, `listings`, `listing_swipes`,
+     `listing_interests`
    - RLS politiky (uživatel upravuje jen svůj profil a své inzeráty)
-   - trigger, který bezpečně na backendu vyhodnotí vzájemný like jako match
    - trigger, který při registraci automaticky založí prázdný profil
    - storage buckety `avatars` a `listings` (veřejné čtení, zápis jen do vlastní složky)
 4. V **Authentication → Providers** nech zapnutý Email provider. Pokud chceš pro pilot
@@ -91,12 +89,14 @@ Aplikace poběží na `http://localhost:3000`.
   žádnou `insert` policy pro běžné uživatele. Jediná cesta je databázový trigger
   `handle_swipe_match`, který po každém swipe zkontroluje, jestli existuje i opačný
   „like", a teprve pak match vytvoří. Klient tedy nemůže match zfalšovat.
-- **Instagram/Facebook** jsou v samostatné tabulce `profile_contacts` s vlastní RLS.
-  Cizí kontakt je čitelný jen ve třech případech: existuje vzájemný match ze swipování,
-  nebo jsem majitel inzerátu a ten člověk o něj projevil zájem, nebo jsem naopak já
-  projevil zájem o jeho inzerát. Jinak zůstává skrytý.
+- **Kontakty** (Instagram/Facebook/telefon) jsou v samostatné tabulce `profile_contacts`
+  s vlastní RLS. Cizí kontakt je čitelný jen ve dvou případech: jsem majitel inzerátu
+  a ten člověk o něj projevil zájem, nebo jsem naopak já projevil zájem o jeho inzerát.
+  Jinak zůstává skrytý.
 - **Zájem o vlastní inzerát** nejde vytvořit — kontroluje to `WITH CHECK` politika
   přímo v databázi, ne jen frontend.
+- **Swipe je soukromý** — politiky na `listing_swipes` dovolí číst i zapisovat výhradně
+  vlastní řádky, takže inzerent nezjistí, kdo mu inzerát přeskočil.
 
 ## Struktura projektu
 
@@ -104,16 +104,16 @@ Aplikace poběží na `http://localhost:3000`.
 src/
   app/
     (app)/            # chráněné routy se společným layoutem (header + spodní nav)
-      listings/        # katalog, detail, nový/editace inzerátu
-      roommates/        # swipe deck
-      matches/           # seznam shod s odemčenými kontakty
-      profile/            # editace vlastního profilu
+      swipe/            # swipe deck bytů (hlavní obrazovka)
+      listings/          # katalog, detail, nový/editace inzerátu
+      saved/              # uložené byty, kde jsem se ozval, moje inzeráty
+      profile/             # editace vlastního profilu
     login/, register/    # veřejné auth stránky
     auth/callback, auth/signout
   components/
     layout/            # Header, BottomNav
     listings/          # karta, filtry, formulář
-    swipe/              # SwipeCard, SwipeDeck, ActionButtons, MatchModal
+    swipe/              # ListingSwipeCard, SwipeDeck, ActionButtons
     profile/            # ProfileForm
     shared/              # RemexoBanner, Tag, EmptyState, BackLink...
   lib/
@@ -121,13 +121,14 @@ src/
     types.ts, utils.ts
 supabase/
   schema.sql             # kompletní DB schema + RLS + storage — spustit v SQL Editoru
+  seed.sql               # ukázková data (6 inzerentů, 10 bytů) — spustit po schema.sql
 ```
 
 ## Známá omezení MVP
 
 - Žádné real-time notifikace — kontakt se zobrazí hned po akci, jinak je vidět
   na stránce Přehled.
-- Žádný chat uvnitř aplikace — lidé se domlouvají přes odemčený Instagram/Facebook.
-- Pořadí kandidátů ve swipe balíčku je zamíchané na klientovi (žádný doporučovací
+- Žádný chat uvnitř aplikace — lidé se domlouvají přes odemčený kontakt.
+- Pořadí bytů ve swipe balíčku je zamíchané na klientovi (žádný doporučovací
   algoritmus) — pro pilot v jednom městě to stačí.
 - Inzeráty nemají moderaci ani nahlašování. Před ostrým během doporučuji doplnit.
